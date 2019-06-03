@@ -13,4 +13,4 @@ The StructureSaver mod allows players to save buildings (made of structure piece
 
 ## License
 
-This software is licensed under [The GNU General Public License version 3](LICENSE), with the following exceptions:
+This software is licensed under [The GNU General Public License version 3](LICENSE).
