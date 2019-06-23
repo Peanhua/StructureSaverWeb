@@ -13,8 +13,8 @@ const unknownEndpoint = (request, response) => {
 }
 
 const errorHandler = (error, request, response, next) => {
-  if(process.env.NODE_ENV !== 'test')
-    logger.error("ERROR:", error.message)
+  //  if(process.env.NODE_ENV !== 'test')
+  logger.error("ERROR:", error.message)
 
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
     return response.status(400).send({ error: 'Invalid id' })
