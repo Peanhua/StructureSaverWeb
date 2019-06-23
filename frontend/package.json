@@ -1,6 +1,7 @@
 {
-  "name": "frontend",
+  "name": "structuresaverweb-frontend",
   "version": "0.1.0",
+  "description": "Frontend for StructureSaverWeb",
   "private": true,
   "dependencies": {
     "react": "^16.8.6",
@@ -16,6 +17,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "http://localhost:3001",
   "browserslist": {
     "production": [
       ">0.2%",
