@@ -7,7 +7,7 @@ if [ ! -f ${FN} ]; then
     exit 1
 fi
 
-MATH=$(for i in $(grep -E '^  <tr><td>' ${FN} | cut --characters=25-29)
+MATH=$(for i in $(grep -E '^  <tr><td>' ${FN} | cut --characters=25-30)
        do
            echo -n "${i}+"
        done
