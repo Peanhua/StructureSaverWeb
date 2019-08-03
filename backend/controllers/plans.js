@@ -1,6 +1,5 @@
 const plansRouter = require('express').Router()
 const Plan        = require('../models/plan')
-const Sequelize = require('sequelize')
 
 plansRouter.get('/getUpdate', async (request, response, next) => {
   let ct = request.query.last_time
@@ -51,32 +50,8 @@ plansRouter.post('/synchronize', async (request, response, next) => {
     }
 
     // Request all the plans we don't have yet:
-    const existing_ids = await Plan.findAll({
-      attributes: ['plan_id'],
-      where: {
-        plan_id: {
-          [Sequelize.Op.in]: plan_ids 
-        }
-      }
-    }).map(plan => plan.plan_id)
+    const request_ids = Plan.getMissingPlanIds(plan_ids)
 
-    console.log("plan_ids =", plan_ids)
-    console.log("existing_ids =", existing_ids)
-    const request_ids = plan_ids.filter(id => !existing_ids.find((find_id) => { return find_id === id }))
-
-    /*
-    plan_ids.forEach(async (id) => {
-      const res = await Plan.findAll({
-        attributes: ['plan_id'],
-        where: {
-          plan_id: id
-        }
-      })
-      if (res.length === 0) {
-        request_ids.push(id)
-      }
-    })
-    */
     console.log(`Requesting: ${request_ids}`)
 
     response.json({
