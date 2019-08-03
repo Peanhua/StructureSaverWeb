@@ -6,7 +6,7 @@ The system consists of Clients, Users, Backend, and Frontend:
 * Clients are Ark: Survival evolved game server(s) and game client(s).
 * Users are entities (usually humans) using the Frontend (usually with a web-browser).
 
-In addition to the above, there are also Players who for the most part are the same as Users. The Players connect to the Clients (game servers) using game clients.
+In addition to the above, there are also Players who for the most part are the same as the Users. The Players connect to the Clients (game servers) using game clients.
 
 
 ## Communication interfaces
@@ -35,5 +35,7 @@ Even though the Frontend has capabilities to communicate "properly" using HTTPS 
 ## Preferred setup
 
 Due to the lack of security with plain HTTP access between the Backend and the Clients, it is highly recommended to keep the Backend behind a firewall and not allow access to it from the internet. The Clients and the Frontend should therefore be placed in a DMZ from where they have access to the Backend.
+
+It is not necessary to provide access to the Frontend from the internet, the Users do not need to use the Frontend for "normal" operations. The Frontend does not need to be running.
 
 <img src="network_layout.svg" alt="Overview of the network layout" width="800" />
