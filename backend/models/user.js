@@ -49,7 +49,7 @@ User.passwordToHash = async (password) => {
 const initialize = async () => {
   await User.sync()
   
-  const res = await User.findAll({})
+  const res = await User.findAll()
 
   if (res.length === 0) {
     const password_hash = await User.passwordToHash('aaa')

@@ -17,24 +17,26 @@ plansRouter.get('/getUpdate', async (request, response, next) => {
     })
   }
 
-  let ct = request.query.last_time
-  if (ct === undefined || ct === "" )
-    ct = 0
-  ct++
-  
-  const rv = {
-    stuff: 0,
-    current: ct
+  const known_ids = Client.getKnownPlansByCookie(cookie)
+  const plan = Plan.getNextPlanToSend(known_ids)
+  console.log(`PlanToSend = ${plan}`)
+  if (plan !== null) {
+    Client.addKnownPlanByCookie(cookie, plan.plan_id)
+    return response.json({
+      type: 'plan',
+      plan: plan
+    })
   }
-
-  response.json(rv)
+  
+  return response.status(200)
 })
 
 
 plansRouter.post('/', async (request, response, next) => {
   try {
     const body = request.body
-    
+
+    // todo: decide whether we fully trust the client or not, knowing who the client is, is not mandatory in here... user/account controller currently trusts the incoming requests
     const cookie = body.cookie
     if (cookie === undefined) {
       return response.status(400).json({
@@ -46,17 +48,18 @@ plansRouter.post('/', async (request, response, next) => {
         error: 'Not logged in.'
       })
     }
-
+    // todo: add some checks for the validity of data, at minimum check the existence of plan_id
     console.log('Create plan, id =', request.body.data.plan_id)
-    const savedPlan = await Plan.create({
+    await Plan.create({
       plan_id: request.body.data.plan_id,
       data:    request.body.data
     })
-    response.status(200)
+
+    return response.status(200)
     
   } catch (exception) {
     console.log(exception)
-    next(exception)
+    return next(exception)
   }
 })
 
@@ -90,19 +93,21 @@ plansRouter.post('/synchronize', async (request, response, next) => {
       })
     }
 
+    Client.setKnownPlansByCookie(cookie, plan_ids)
+
     // Request the client to send us all the plans we don't have yet:
     const request_ids = Plan.getMissingPlanIds(plan_ids)
 
     console.log(`Requesting: ${request_ids}`)
 
-    response.json({
+    return response.json({
       type:          'plansSynchronize',
       send_plan_ids: request_ids
     })
     
   } catch (exception) {
     console.log(exception)
-    next(exception)
+    return next(exception)
   }
 })
 

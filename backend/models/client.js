@@ -29,8 +29,12 @@ const Client = sequelize.define('client', {
   },
   cookie: {
     type:      Sequelize.STRING,
-    allowNull: true,
+    allowNull: false,
     unique:    true
+  },
+  known_plan_ids: {
+    type:      Sequelize.JSON,
+    allowNull: true
   }
 }, {
 })
@@ -39,9 +43,34 @@ Client.sync()
 
 
 
-Client.authenticate = async (client_id, password) => {
+Client.passwordToHash = async (password) => {
   const salt_rounds = 10
-  const password_hash = await bcrypt.hash(password, salt_rounds)
+  return await bcrypt.hash(password, salt_rounds)
+}
+
+
+Client.createCookie = async (client_id, password_hash) => {
+  // todo: don't use password_hash for making this unique
+  const secret = 'verisiikret' // todo: read from ini, add some random stuff into it
+  const salt_rounds = 3
+  const cookie = await bcrypt.hash(secret + password_hash, salt_rounds)
+  // todo: handle the case where we create identical cookie with someone else by re-creating a new cookie for this client
+
+  await Client.update({
+    cookie: cookie
+  }, {
+    where: {
+      client_id: client_id
+    }
+  })
+  // todo: handle failures
+
+  return cookie
+}
+
+
+Client.authenticate = async (client_id, password) => {
+  const password_hash = await Client.passwordToHash(password)
     
   const res = await Client.findAll({
     attributes: ['client_id'],
@@ -55,24 +84,9 @@ Client.authenticate = async (client_id, password) => {
     return null
   }
 
-  const secret = 'verisiikret' // todo: read from ini, add some random stuff into it
-  const cookie = await bcrypt.hash(secret + password_hash, salt_rounds)
-  // todo: handle the case where we create identical cookie with someone else by re-creating a new cookie for this client
-  
-  await Client.setCookie(client_id, cookie)
-  // todo: handle failures
+  const cookie = await Client.createCookie(client_id, password_hash)
   
   return cookie
-}
-
-Client.setCookie = (client_id, cookie) => {
-  return Client.update({
-    cookie: cookie
-  }, {
-    where: {
-      client_id: client_id
-    }
-  })
 }
 
 
@@ -89,6 +103,46 @@ Client.checkCookie = async (cookie) => {
   }
 
   return res.client_id
+}
+
+
+Client.getKnownPlansByCookie = async (cookie) => {
+  console.log(`getKnownPlansByCookie(${cookie})`)
+
+  const res = await Client.findAll({
+    attributes: ['known_plan_ids'],
+    where: {
+      cookie: cookie
+    }
+  })
+  console.log(res)
+  return res.known_plan_ids
+}
+
+Client.setKnownPlansByCookie = async (cookie, known_plan_ids) => {
+  console.log(`setKnownPlansByCookie(${cookie}, ${known_plan_ids})`)
+
+  return Client.update({
+    known_plan_ids: known_plan_ids
+  }, {
+    where: {
+      cookie: cookie
+    }
+  })
+}
+
+
+Client.addKnownPlanByCookie = async (cookie, plan_id) => {
+  console.log(`addKnownPlanByCookie(${cookie}, ${plan_id})`)
+
+  let known_plans = await Client.getKnownPlansByCookie(cookie)
+  if (!Array.isArray(known_plans)) {
+    known_plans = []
+  }
+
+  known_plans.push(plan_id)
+
+  Client.setKnownPlansByCookie(cookie, known_plans)
 }
 
 
