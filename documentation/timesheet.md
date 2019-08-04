@@ -11,5 +11,7 @@ Time used for the project, not including time used for the game mod portion.
   <tr><td> 2.8.</td><td>  1.50</td><td>Backend server communication.</td></tr>
   <tr><td> 3.8.</td><td>  0.50</td><td>Backend server communication.</td></tr>
   <tr><td>     </td><td>  0.50</td><td>Architecture documentation.</td></tr>
-  <tr><th>Total</th><th>  5.75</th><th></th></tr>
+  <tr><td> 4.8.</td><td>  1.00</td><td>Backend server communication.</td></tr>
+  <tr><td>     </td><td>  1.00</td><td>HTTP post request testing system.</td></tr>
+  <tr><th>Total</th><th>  7.75</th><th></th></tr>
 </table>
