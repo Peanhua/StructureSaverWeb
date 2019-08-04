@@ -17,14 +17,14 @@ plansRouter.get('/getUpdate', async (request, response, next) => {
     })
   }
 
-  const known_ids = Client.getKnownPlansByCookie(cookie)
-  const plan = Plan.getNextPlanToSend(known_ids)
+  const known_ids = await Client.getKnownPlansByCookie(cookie)
+  const plan = await Plan.getNextPlanToSend(known_ids)
   console.log(`PlanToSend = ${plan}`)
   if (plan !== null) {
-    Client.addKnownPlanByCookie(cookie, plan.plan_id)
+    await Client.addKnownPlanByCookie(cookie, plan.plan_id)
     return response.json({
       type: 'plan',
-      plan: plan
+      plan: plan.data
     })
   }
   
@@ -93,10 +93,11 @@ plansRouter.post('/synchronize', async (request, response, next) => {
       })
     }
 
+    console.log("plan_ids =", typeof plan_ids)
     Client.setKnownPlansByCookie(cookie, plan_ids)
 
     // Request the client to send us all the plans we don't have yet:
-    const request_ids = Plan.getMissingPlanIds(plan_ids)
+    const request_ids = await Plan.getMissingPlanIds(plan_ids)
 
     console.log(`Requesting: ${request_ids}`)
 

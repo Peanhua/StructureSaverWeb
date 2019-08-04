@@ -111,19 +111,21 @@ Client.checkCookie = async (cookie) => {
 Client.getKnownPlansByCookie = async (cookie) => {
   console.log(`getKnownPlansByCookie(${cookie})`)
 
-  const res = await Client.findAll({
-    attributes: ['known_plan_ids'],
+  const res = await Client.findOne({
     where: {
       cookie: cookie
     }
   })
-  console.log(res)
+
   return res.known_plan_ids
 }
 
 Client.setKnownPlansByCookie = async (cookie, known_plan_ids) => {
   console.log(`setKnownPlansByCookie(${cookie}, ${known_plan_ids})`)
 
+  console.log("known_plan_ids =", typeof known_plan_ids)
+  console.log(Array.isArray(known_plan_ids))
+  
   return Client.update({
     known_plan_ids: known_plan_ids
   }, {
