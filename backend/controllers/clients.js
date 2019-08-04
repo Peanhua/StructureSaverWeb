@@ -21,8 +21,6 @@ clientsRouter.post('/login', async (request, response, next) => {
     }
 
     const cookie = await Client.authenticate(client_id, password)
-    console.log("found cookie =", cookie)
-    
     if (cookie === null) {
       return response.status(400).json({
         error: 'Unknown client_id or wrong password.'
