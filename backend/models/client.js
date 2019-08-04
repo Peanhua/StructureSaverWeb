@@ -70,21 +70,23 @@ Client.createCookie = async (client_id, password_hash) => {
 
 
 Client.authenticate = async (client_id, password) => {
-  const password_hash = await Client.passwordToHash(password)
+  console.log(`Client.authenticate(${client_id}, ${password})`)
     
-  const res = await Client.findAll({
-    attributes: ['client_id'],
+  const client = await Client.findOne({
     where: {
-      client_id:     client_id,
-      password_hash: password_hash
+      client_id: client_id
     }
   })
 
-  if (res.length === 0) {
+  if (client === null) {
     return null
   }
 
-  const cookie = await Client.createCookie(client_id, password_hash)
+  if (! await bcrypt.compare(password, client.password_hash)) {
+    return null
+  }
+  
+  const cookie = await Client.createCookie(client_id, client.password_hash)
   
   return cookie
 }
