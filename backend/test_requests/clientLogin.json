@@ -1,0 +1,7 @@
+{
+  "path": "/api/clients/login",
+  "data": {
+    "client_id": "keke",
+    "password": "kake"
+  }
+}
