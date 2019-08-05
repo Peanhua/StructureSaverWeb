@@ -1,6 +1,7 @@
 const bcrypt        = require('bcrypt')
 const clientsRouter = require('express').Router()
 const Client        = require('../models/client')
+const Pending       = require('../models/pending')
 
 
 clientsRouter.post('/', async (request, response, next) => {
@@ -65,6 +66,7 @@ clientsRouter.post('/login', async (request, response, next) => {
       })
     }
 
+    Pending.clear(client_id)
     Client.setKnownPlansByCookie(cookie, [])
 
     return response.json({

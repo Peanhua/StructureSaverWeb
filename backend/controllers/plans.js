@@ -1,6 +1,7 @@
 const plansRouter = require('express').Router()
 const Plan        = require('../models/plan')
 const Client      = require('../models/client')
+const Pending     = require('../models/pending')
 
 
 
@@ -14,20 +15,30 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
       error: 'Missing cookie.'
     })
   }
-  if (await Client.checkCookie(cookie) === null) {
+
+  const client_id = await Client.checkCookie(cookie)
+  if (client_id === null) {
     return response.status(400).json({
       error: 'Not logged in.'
     })
   }
 
   const known_ids = await Client.getKnownPlansByCookie(cookie)
+
   // Request the client to send us all the plans we don't have yet:
-  const request_ids = await Plan.getMissingPlanIds(known_ids)
-  if (request_ids.length > 0) {
-    // todo: filter out plan ids we have already requested: we need to keep track of the requested plan ids with timeout
+  const missing_ids = await Plan.getMissingPlanIds(known_ids)
+  if (missing_ids.length > 0) {
+    // Filter out plan ids we have already requested:
+    const already_requested_ids = await Pending.get(client_id, 'plan')
+    console.log(already_requested_ids)
+    const request_ids = missing_ids.filter(id => !already_requested_ids.find((find_id) => { return find_id === id }))
+    
     console.log('Requesting plans:', request_ids)
+
+    Pending.add(client_id, 'plan', request_ids)
+    
     return response.json({
-      type: 'sendPlans',
+      type:     'sendPlans',
       plan_ids: request_ids
     })
   }
@@ -59,18 +70,23 @@ plansRouter.post('/', async (request, response, next) => {
         error: 'Missing cookie.'
       })
     }
-    if (Client.checkCookie(cookie) === null) {
+
+    const client_id = await Client.checkCookie(cookie)
+    if (client_id === null) {
       return response.status(400).json({
         error: 'Not logged in.'
       })
     }
     // todo: add some checks for the validity of data, at minimum check the existence of plan_id
     console.log('Create plan, id =', request.body.data.plan_id)
+
     await Plan.create({
       plan_id: request.body.data.plan_id,
       data:    request.body.data
     })
 
+    Pending.remove(client_id, 'plan', request.body.data.plan_id)
+    
     return response.status(200)
     
   } catch (exception) {
@@ -91,7 +107,7 @@ plansRouter.post('/synchronize', async (request, response, next) => {
         error: 'Missing cookie.'
       })
     }
-    if (Client.checkCookie(cookie) === null) {
+    if (await Client.checkCookie(cookie) === null) {
       return response.status(400).json({
         error: 'Not logged in.'
       })
