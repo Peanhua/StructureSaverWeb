@@ -70,7 +70,7 @@ Client.createCookie = async (client_id, password_hash) => {
 
 
 Client.authenticate = async (client_id, password) => {
-  console.log(`Client.authenticate(${client_id}, ${password})`)
+  console.log('Client.authenticate(client_id =' , client_id, ' password =', password, ')')
     
   const client = await Client.findOne({
     where: {
@@ -93,14 +93,15 @@ Client.authenticate = async (client_id, password) => {
 
 
 Client.checkCookie = async (cookie) => {
-  const res = await Client.findAll({
-    attributes: ['client_id'],
+  console.log('Client.checkCookie(cookie =', cookie, ')')
+  
+  const res = await Client.findOne({
     where: {
       cookie: cookie
     }
   })
 
-  if (res.length === 0) {
+  if (res === null) {
     return null
   }
 
@@ -109,7 +110,7 @@ Client.checkCookie = async (cookie) => {
 
 
 Client.getKnownPlansByCookie = async (cookie) => {
-  console.log(`getKnownPlansByCookie(${cookie})`)
+  console.log(`Client.getKnownPlansByCookie(${cookie})`)
 
   const res = await Client.findOne({
     where: {
@@ -121,11 +122,8 @@ Client.getKnownPlansByCookie = async (cookie) => {
 }
 
 Client.setKnownPlansByCookie = async (cookie, known_plan_ids) => {
-  console.log(`setKnownPlansByCookie(${cookie}, ${known_plan_ids})`)
+  console.log('Client.setKnownPlansByCookie(cookie =', cookie, ', known_plan_ids =', known_plan_ids, ')')
 
-  console.log("known_plan_ids =", typeof known_plan_ids)
-  console.log(Array.isArray(known_plan_ids))
-  
   return Client.update({
     known_plan_ids: known_plan_ids
   }, {
@@ -137,17 +135,22 @@ Client.setKnownPlansByCookie = async (cookie, known_plan_ids) => {
 
 
 Client.addKnownPlanByCookie = async (cookie, plan_id) => {
-  console.log(`addKnownPlanByCookie(${cookie}, ${plan_id})`)
+  console.log('Client.addKnownPlanByCookie(cookie =', cookie, ', plan_id(s) =', plan_id, ')')
 
   let known_plans = await Client.getKnownPlansByCookie(cookie)
   if (!Array.isArray(known_plans)) {
     known_plans = []
   }
 
-  known_plans.push(plan_id)
+  if (Array.isArray(plan_id)) {
+    known_plans = known_plans.concat(plan_id)
+  } else {
+    known_plans.push(plan_id)
+  }
 
   Client.setKnownPlansByCookie(cookie, known_plans)
 }
+
 
 
 module.exports = Client

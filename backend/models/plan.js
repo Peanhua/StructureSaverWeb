@@ -32,7 +32,7 @@ Plan.sync()
 
 
 Plan.getMissingPlanIds = async (having_plan_ids) => {
-  console.log("getMissingPlanIds()")
+  console.log('getMissingPlanIds(having_plan_ids =', having_plan_ids, ')')
 
   const existing_ids = await Plan.findAll({
     attributes: ['plan_id'],
@@ -43,12 +43,7 @@ Plan.getMissingPlanIds = async (having_plan_ids) => {
     }
   }).map(plan => plan.plan_id)
   
-  console.log("plan_ids =", having_plan_ids)
-  console.log("existing_ids =", existing_ids)
-
   const missing_plan_ids = having_plan_ids.filter(id => !existing_ids.find((find_id) => { return find_id === id }))
-
-  console.log("missing_plan_ids =", missing_plan_ids)
 
   return missing_plan_ids
 }
@@ -74,7 +69,7 @@ Plan.getPlanIdsNotListed = async (listed_plan_ids) => {
 
 Plan.getNextPlanToSend = async (known_plan_ids) => {
   // todo: do this smarter: use the client_id as parameter instead of known_plan_ids and do the stuff in SQL
-  console.log(`Plan.getNextPlanToSend(${known_plan_ids})`)
+  console.log('Plan.getNextPlanToSend(', known_plan_ids, ')')
 
   const plan_ids = await Plan.getPlanIdsNotListed(known_plan_ids)
   if (plan_ids.length === 0) {

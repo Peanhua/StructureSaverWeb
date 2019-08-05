@@ -6,23 +6,25 @@ const Client      = require('../models/client')
 
 // todo: move /getUpdate to client controller
 plansRouter.post('/getUpdate', async (request, response, next) => {
-  const cookie = request.query.cookie
+  console.log('plansRouter.getUpdate()')
+  
+  const cookie = request.body.cookie
   if (cookie === undefined) {
     return response.status(400).json({
       error: 'Missing cookie.'
     })
   }
-  if (Client.checkCookie(cookie) === null) {
+  if (await Client.checkCookie(cookie) === null) {
     return response.status(400).json({
       error: 'Not logged in.'
     })
   }
 
   const known_ids = await Client.getKnownPlansByCookie(cookie)
-  
   // Request the client to send us all the plans we don't have yet:
   const request_ids = await Plan.getMissingPlanIds(known_ids)
   if (request_ids.length > 0) {
+    // todo: filter out plan ids we have already requested: we need to keep track of the requested plan ids with timeout
     console.log('Requesting plans:', request_ids)
     return response.json({
       type: 'sendPlans',
@@ -80,6 +82,7 @@ plansRouter.post('/', async (request, response, next) => {
 
 plansRouter.post('/synchronize', async (request, response, next) => {
   try {
+    console.log('plansRouter.synchronize()')
     const body = request.body
 
     const cookie = body.cookie
@@ -107,8 +110,7 @@ plansRouter.post('/synchronize', async (request, response, next) => {
       })
     }
 
-    console.log("plan_ids =", typeof plan_ids)
-    Client.setKnownPlansByCookie(cookie, plan_ids)
+    Client.addKnownPlanByCookie(cookie, plan_ids)
 
     return response.json({
       type: 'synchronize',
