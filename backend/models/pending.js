@@ -52,7 +52,6 @@ Pending.get = async (client_id, type) => {
 Pending.add = async (client_id, type, ids) => {
   console.log('Pending.add(client_id =', client_id, ', type =', type, ', ids =', ids, ')')
   ids.forEach((id) => {
-    console.log("add ", id)
     Pending.create({
       client_id:       client_id,
       request_type:    type,
