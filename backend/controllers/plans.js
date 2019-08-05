@@ -4,7 +4,8 @@ const Client      = require('../models/client')
 
 
 
-plansRouter.get('/getUpdate', async (request, response, next) => {
+// todo: move /getUpdate to client controller
+plansRouter.post('/getUpdate', async (request, response, next) => {
   const cookie = request.query.cookie
   if (cookie === undefined) {
     return response.status(400).json({
@@ -18,9 +19,22 @@ plansRouter.get('/getUpdate', async (request, response, next) => {
   }
 
   const known_ids = await Client.getKnownPlansByCookie(cookie)
+  
+  // Request the client to send us all the plans we don't have yet:
+  const request_ids = await Plan.getMissingPlanIds(known_ids)
+  if (request_ids.length > 0) {
+    console.log('Requesting plans:', request_ids)
+    return response.json({
+      type: 'sendPlans',
+      plan_ids: request_ids
+    })
+  }
+
+  // Send plans we have but client doesn't have yet:
   const plan = await Plan.getNextPlanToSend(known_ids)
-  console.log(`PlanToSend = ${plan}`)
   if (plan !== null) {
+    console.log('Sending plan', plan)
+    // todo: wait for confirmation from the client before calling addKnownPlan...() ? will then need to keep track of what we have sent and only send again after a long timeout
     await Client.addKnownPlanByCookie(cookie, plan.plan_id)
     return response.json({
       type: 'plan',
@@ -96,14 +110,8 @@ plansRouter.post('/synchronize', async (request, response, next) => {
     console.log("plan_ids =", typeof plan_ids)
     Client.setKnownPlansByCookie(cookie, plan_ids)
 
-    // Request the client to send us all the plans we don't have yet:
-    const request_ids = await Plan.getMissingPlanIds(plan_ids)
-
-    console.log(`Requesting: ${request_ids}`)
-
     return response.json({
-      type:          'plansSynchronize',
-      send_plan_ids: request_ids
+      type: 'synchronize',
     })
     
   } catch (exception) {
