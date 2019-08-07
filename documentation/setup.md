@@ -16,9 +16,11 @@ However, most users are probably not able to keep the Backend behind a firewall 
 ## Configuration
 
 Create a file named ".env" into the backend root directory, and adjust the Backend configuration in this file. The format is:
+```
 VARIABLE1=Value1
 VARIABLE2=Value2
 ...
+```
 
 Below are listed all the variables:
 <table>
@@ -28,6 +30,16 @@ Below are listed all the variables:
   <tr><td>CERT</td>    <td>String</td> <td>"cert.pem"</td>   <td>The filename of the certificate used for HTTPS.</td>
   <tr><td>CERT_KEY</td><td>String</td> <td>"key.pem"</td>    <td>The filename of the certificate key used for HTTPS.</td>
 </table>
+
+Example ".env" file:
+```
+PORT=9500
+PROTOCOL=https
+CERT=/etc/mycert.pem
+CERT_KEY=/etc/mycertkey.pem
+```
+
+If the defaults are fine, you don't need the ".env" file.
 
 
 ## Installing dependencies
