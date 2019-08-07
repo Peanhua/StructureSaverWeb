@@ -43,3 +43,20 @@ Use the following npm command to start the Backend normally:
 ```
 $ npm start
 ```
+
+
+## Client (Ark game server) configuration
+
+Point all Clients (Ark game servers) to the Backend by setting the following GameUserSettings.ini -options:
+```
+[StructureSaver]
+Backend="http://localhost:3001"
+BackendClientId="id"
+BackendClientPassword="password"
+```
+
+Each Client must have unique `BackendClientId`. The ClientIds would normally be created in the Frontend, but the Frontend is currently not ready, so the supplied test script `bin/post.js` can be used to generate them as well. For each Client, edit the `backend/test_requests/clientCreate.json` file, setting the "client_id" and "password" fields appropriately, then execute it:
+```
+$ ./bin/post.js backend/test_requests/clientCreate.json
+```
+Note that the Backend must be running, and you probably need to edit the `bin/post.js` script, adjust the `hostname` and `port` options to point to your Backend.
