@@ -1,21 +1,9 @@
 const Sequelize = require('sequelize')
+const db        = require('../utils/db')
 
-const sequelize = new Sequelize('structuresaver', null, null, {
-  dialect: 'postgres',
-  host: '/tmp'
-})
-
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection (Pending) has been established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect (Pending) to the database:', err);
-  });
 
 const Model = Sequelize.Model
-const Pending = sequelize.define('pending', {
+const Pending = db.sequelize.define('pending', {
   client_id: {
     type:      Sequelize.STRING,
     allowNull: false,

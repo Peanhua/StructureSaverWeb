@@ -2,6 +2,8 @@
 
 The Backend needs to be running, the Frontend is optional.
 
+The Backend requires a database for storage, supported database engines are: PostgreSQL (tested), MySQL/MariaDB, and SQLite. The database connection currently needs to be adjusted in the `backend/utils/db.js` file directly. The default setup uses PostgreSQL with unix socket, meaning the current user is authenticated without password. For information about how to use different database engines, see https://sequelize.org/master/manual/dialects.html
+
 Due to the lack of security with plain HTTP access between the Backend and the Clients, it is highly recommended to keep the Backend behind a firewall and not allow access to it from the internet. The Clients and the Frontend should therefore be placed in a DMZ from where they have access to the Backend.
 
 It is not necessary to provide access to the Frontend from the internet, the Users do not need to use the Frontend for "normal" operations.

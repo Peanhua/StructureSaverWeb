@@ -1,21 +1,9 @@
 const Sequelize = require('sequelize')
+const db        = require('../utils/db')
 
-const sequelize = new Sequelize('structuresaver', null, null, {
-  dialect: 'postgres',
-  host: '/tmp'
-})
-
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection (PlayerMemory) has been established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect (PlayerMemory) to the database:', err);
-  });
 
 const Model = Sequelize.Model
-const PlayerMemory = sequelize.define('player_memory', {
+const PlayerMemory = db.sequelize.define('player_memory', {
   player_id: {
     type:      Sequelize.STRING,
     allowNull: false,

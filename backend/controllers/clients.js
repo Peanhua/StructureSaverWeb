@@ -21,10 +21,8 @@ clientsRouter.post('/', async (request, response, next) => {
       })
     }
     const password_hash = await Client.passwordToHash(password)
-    console.log("password_hash =", password_hash)
 
     const cookie = await Client.createCookie(client_id, password_hash)
-    console.log("cookie =", cookie)
 
     const saved = await Client.create({
       client_id:     client_id,

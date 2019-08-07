@@ -100,7 +100,6 @@ plansRouter.post('/', async (request, response, next) => {
   try {
     const body = request.body
 
-    // todo: decide whether we fully trust the client or not, knowing who the client is, is not mandatory in here... user/account controller currently trusts the incoming requests
     const cookie = body.cookie
     if (cookie === undefined) {
       return response.status(400).json({
