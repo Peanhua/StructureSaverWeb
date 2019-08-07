@@ -15,9 +15,9 @@ In addition to the above, there are also Players who for the most part are the s
 
 The Clients communicate with the Backend.
 
-The Clients provide only basic HTTP support: they can do GET and POST requests, and HTTPS is not available. The request and response headers can not be read or written in the Clients. Thus the Clients and the Backend communicate with HTTP and things like cookies are managed manually.
+The Clients provide only basic HTTP support: they can do GET and POST requests, and HTTPS can not be used with self-signed certificates. The request and response headers can not be read or written in the Clients. Thus the Clients and the Backend communicate with HTTP in majority of the installations, and things like cookies are managed manually.
 
-Each Client sends first a "login" request, and then synchronizes its data with the backend.
+Each Client sends first a "login" request, and then synchronizes its data with the backend. All the communication is initiated by the Clients. When Clients wants to send something to the Backend, the Client just sends it with a specific request. But when the Backend wants to send something to the Client, the Backend waits for the Client to send a update request, and then the Backend responds to the update request with the data it wants to send to the Client.
 
 
 ### Communication interfaces: Users
@@ -29,13 +29,4 @@ The Users use HTTPS and standard web application practices.
 
 ### Communication interfaces: Frontend
 
-Even though the Frontend has capabilities to communicate "properly" using HTTPS and other things, the Frontend communicates with the Backend similarly to the Clients to avoid duplicating interface code. The Frontend is allocated one Client id.
-
-
-## Preferred setup
-
-Due to the lack of security with plain HTTP access between the Backend and the Clients, it is highly recommended to keep the Backend behind a firewall and not allow access to it from the internet. The Clients and the Frontend should therefore be placed in a DMZ from where they have access to the Backend.
-
-It is not necessary to provide access to the Frontend from the internet, the Users do not need to use the Frontend for "normal" operations. The Frontend does not need to be running.
-
-<img src="network_layout.svg" alt="Overview of the network layout" width="800" />
+The Frontend communicates with the Backend similarly to the Clients to avoid duplicating interface code. Methods that are only used by the Frontend, are not using the manual cookie method for authentication. The Frontend is allocated one Client id.
