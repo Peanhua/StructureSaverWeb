@@ -22,8 +22,7 @@ PlayerMemory.sync()
 
 
 PlayerMemory.getMissingPlayerIds = async (having_player_ids) => {
-  console.log('getMissingPlayerIds(having_player_ids =', having_player_ids, ')')
-
+  //console.log('getMissingPlayerIds(having_player_ids =', having_player_ids, ')')
   const existing_ids = await PlayerMemory.findAll({
     attributes: ['player_id'],
     where: {
@@ -39,8 +38,7 @@ PlayerMemory.getMissingPlayerIds = async (having_player_ids) => {
 }
 
 PlayerMemory.getPlayerIdsNotListed = async (listed_player_ids) => {
-  console.log(`getPlayerIdsNotListed(${listed_player_ids})`)
-
+  //console.log(`getPlayerIdsNotListed(${listed_player_ids})`)
   const res = await PlayerMemory.findAll({
     attributes: ['player_id'],
     where: {
@@ -56,14 +54,13 @@ PlayerMemory.getPlayerIdsNotListed = async (listed_player_ids) => {
 }
 
 PlayerMemory.getNextPlayerMemoryToSend = async (known_player_ids) => {
-  console.log('PlayerMemory.getNextPlayerMemoryToSend(known_player_ids =', known_player_ids, ')')
-
+  //console.log('PlayerMemory.getNextPlayerMemoryToSend(known_player_ids =', known_player_ids, ')')
   const player_ids = await PlayerMemory.getPlayerIdsNotListed(known_player_ids)
   if (player_ids.length === 0) {
     return null
   }
 
-  console.log("Retrieve first not-known player, id =", player_ids[0])
+  //console.log("Retrieve first not-known player, id =", player_ids[0])
   const rv = await PlayerMemory.findOne({
     where: {
       player_id: player_ids[0]

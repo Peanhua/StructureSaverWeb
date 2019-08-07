@@ -31,7 +31,6 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
   if (missing_ids.length > 0) {
     // Filter out plan ids we have already requested:
     const already_requested_ids = await Pending.get(client_id, 'plan')
-    console.log(already_requested_ids)
     const request_ids = missing_ids.filter(id => !already_requested_ids.find((find_id) => { return find_id === id }))
 
     if (request_ids.length > 0) {

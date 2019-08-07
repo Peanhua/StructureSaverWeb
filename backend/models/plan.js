@@ -19,8 +19,7 @@ Plan.sync()
 
 
 Plan.getMissingPlanIds = async (having_plan_ids) => {
-  console.log('getMissingPlanIds(having_plan_ids =', having_plan_ids, ')')
-
+  //  console.log('getMissingPlanIds(having_plan_ids =', having_plan_ids, ')')
   const existing_ids = await Plan.findAll({
     attributes: ['plan_id'],
     where: {
@@ -36,8 +35,7 @@ Plan.getMissingPlanIds = async (having_plan_ids) => {
 }
 
 Plan.getPlanIdsNotListed = async (listed_plan_ids) => {
-  console.log(`getPlanIdsNotListed(${listed_plan_ids})`)
-
+  //console.log(`getPlanIdsNotListed(${listed_plan_ids})`)
   const res = await Plan.findAll({
     attributes: ['plan_id'],
     where: {
@@ -54,14 +52,13 @@ Plan.getPlanIdsNotListed = async (listed_plan_ids) => {
 
 Plan.getNextPlanToSend = async (known_plan_ids) => {
   // todo: do this smarter: use the client_id as parameter instead of known_plan_ids and do the stuff in SQL
-  console.log('Plan.getNextPlanToSend(known_plan_ids =', known_plan_ids, ')')
-
+  //  console.log('Plan.getNextPlanToSend(known_plan_ids =', known_plan_ids, ')')
   const plan_ids = await Plan.getPlanIdsNotListed(known_plan_ids)
   if (plan_ids.length === 0) {
     return null
   }
 
-  console.log("Retrieve first not-known plan, id =", plan_ids[0])
+  // console.log("Retrieve first not-known plan, id =", plan_ids[0])
   const rv = await Plan.findOne({
     where: {
       plan_id: plan_ids[0]

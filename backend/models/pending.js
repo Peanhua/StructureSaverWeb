@@ -38,7 +38,7 @@ Pending.get = async (client_id, type) => {
 }
 
 Pending.add = async (client_id, type, ids) => {
-  console.log('Pending.add(client_id =', client_id, ', type =', type, ', ids =', ids, ')')
+  //console.log('Pending.add(client_id =', client_id, ', type =', type, ', ids =', ids, ')')
   ids.forEach((id) => {
     Pending.create({
       client_id:       client_id,
@@ -49,7 +49,7 @@ Pending.add = async (client_id, type, ids) => {
 }
 
 Pending.remove = async (client_id, type, id) => {
-  console.log('Pending.remove(client_id =', client_id, ', type =', type, ', id =', id, ')')
+  //console.log('Pending.remove(client_id =', client_id, ', type =', type, ', id =', id, ')')
   return Pending.destroy({
     where: {
       client_id:       client_id,

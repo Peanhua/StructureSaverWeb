@@ -2,7 +2,8 @@ const Sequelize = require('sequelize')
 
 const sequelize = new Sequelize('structuresaver', null, null, {
   dialect: 'postgres',
-  host: '/tmp'
+  host: '/tmp',
+  logging: false
 })
 
 const initialize = async () => {

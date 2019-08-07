@@ -62,8 +62,7 @@ Client.createCookie = async (client_id, password_hash) => {
 
 
 Client.authenticate = async (client_id, password) => {
-  console.log('Client.authenticate(client_id =' , client_id, ' password =', password, ')')
-    
+  //console.log('Client.authenticate(client_id =' , client_id, ' password =', password, ')')
   const client = await Client.findOne({
     where: {
       client_id: client_id
@@ -85,8 +84,7 @@ Client.authenticate = async (client_id, password) => {
 
 
 Client.checkCookie = async (cookie) => {
-  console.log('Client.checkCookie(cookie =', cookie, ')')
-  
+  //console.log('Client.checkCookie(cookie =', cookie, ')')
   const res = await Client.findOne({
     where: {
       cookie: cookie
@@ -104,8 +102,7 @@ Client.checkCookie = async (cookie) => {
 
 // Known plans:
 Client.getKnownPlansByCookie = async (cookie) => {
-  console.log(`Client.getKnownPlansByCookie(${cookie})`)
-
+  //console.log(`Client.getKnownPlansByCookie(${cookie})`)
   const res = await Client.findOne({
     where: {
       cookie: cookie
@@ -116,8 +113,7 @@ Client.getKnownPlansByCookie = async (cookie) => {
 }
 
 Client.setKnownPlansByCookie = async (cookie, known_plan_ids) => {
-  console.log('Client.setKnownPlansByCookie(cookie =', cookie, ', known_plan_ids =', known_plan_ids, ')')
-
+  //  console.log('Client.setKnownPlansByCookie(cookie =', cookie, ', known_plan_ids =', known_plan_ids, ')')
   return Client.update({
     known_plan_ids: known_plan_ids
   }, {
@@ -128,8 +124,7 @@ Client.setKnownPlansByCookie = async (cookie, known_plan_ids) => {
 }
 
 Client.addKnownPlanByCookie = async (cookie, plan_id) => {
-  console.log('Client.addKnownPlanByCookie(cookie =', cookie, ', plan_id(s) =', plan_id, ')')
-
+  //console.log('Client.addKnownPlanByCookie(cookie =', cookie, ', plan_id(s) =', plan_id, ')')
   let known_plans = await Client.getKnownPlansByCookie(cookie)
   if (!Array.isArray(known_plans)) {
     known_plans = []
@@ -150,8 +145,7 @@ Client.addKnownPlanByCookie = async (cookie, plan_id) => {
 // todo: could share the same code with known plans -stuff
 // todo: instead of using cookie, use the client_id because we have it anyway
 Client.getKnownPlayersByCookie = async (cookie) => {
-  console.log(`Client.getKnownPlayersByCookie(${cookie})`)
-
+  //console.log(`Client.getKnownPlayersByCookie(${cookie})`)
   const res = await Client.findOne({
     where: {
       cookie: cookie
@@ -162,8 +156,7 @@ Client.getKnownPlayersByCookie = async (cookie) => {
 }
 
 Client.setKnownPlayersByCookie = async (cookie, known_player_ids) => {
-  console.log('Client.setKnownPlayersByCookie(cookie =', cookie, ', known_player_ids =', known_player_ids, ')')
-
+  //console.log('Client.setKnownPlayersByCookie(cookie =', cookie, ', known_player_ids =', known_player_ids, ')')
   return Client.update({
     known_player_ids: known_player_ids
   }, {
@@ -174,8 +167,7 @@ Client.setKnownPlayersByCookie = async (cookie, known_player_ids) => {
 }
 
 Client.addKnownPlayerByCookie = async (cookie, player_id) => {
-  console.log('Client.addKnownPlayerByCookie(cookie =', cookie, ', player_id(s) =', player_id, ')')
-
+  //console.log('Client.addKnownPlayerByCookie(cookie =', cookie, ', player_id(s) =', player_id, ')')
   let known_players = await Client.getKnownPlayersByCookie(cookie)
   if (!Array.isArray(known_players)) {
     known_players = []
