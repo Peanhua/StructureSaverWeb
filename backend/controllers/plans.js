@@ -70,7 +70,7 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
   // Send plans we have but client doesn't have yet:
   const plan = await Plan.getNextPlanToSend(known_ids)
   if (plan !== null) {
-    console.log('Sending plan', plan)
+    console.log('Sending plan', plan.plan_id)
     // todo: wait for confirmation from the client before calling addKnownPlan...() ? will then need to keep track of what we have sent and only send again after a long timeout
     await Client.addKnownPlanByCookie(cookie, plan.plan_id)
     return response.json({
@@ -82,7 +82,7 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
   // Send player memories we have but client doesn't have yet:
   const mem = await PlayerMemory.getNextPlayerMemoryToSend(known_players)
   if (mem !== null) {
-    console.log('Sending player memory', mem)
+    console.log('Sending player memory', mem.player_id)
     await Client.addKnownPlayerByCookie(cookie, mem.player_id)
     return response.json({
       type:         'playerMemory',
