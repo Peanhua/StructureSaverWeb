@@ -2,6 +2,18 @@
 
 The Backend needs to be running, the Frontend is optional.
 
+## IMPORTANT
+
+This is beta version, backup your files first!
+
+Issues if a player has plans on more than one server:
+* Migration of player memories is not yet done, the player will only see the plans from one of the servers.
+* Plan id generation was not unique earlier, so plans created on different servers may be using same plan ids. There can only be one plan per id, so the other plans will be DISCARDED.
+
+The plan id generation is now better as of v2.7 of the mod: The current UTC timestamp with 1 second resolution is used in the plan id, making it impossible for player to generate two plans with same id.
+
+The first time synchronization between the game servers (Clients) and the Backend may take a long time depending on how many plans you have. With default settings it is approximately 10 seconds for each plan, including deleted plans (they were only marked as being "deleted" and never really deleted).
+
 
 ## Database
 
