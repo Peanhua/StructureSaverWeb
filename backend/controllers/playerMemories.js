@@ -33,7 +33,9 @@ playerMemoriesRouter.post('/', async (request, response, next) => {
 
     Pending.remove(client_id, 'playermem', mem.player_id)
 
-    return response.json(saved)
+    return response.status(200).json({
+      type: 'success'
+    })
     
   } catch (exception) {
     return next(exception)

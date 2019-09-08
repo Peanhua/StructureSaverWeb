@@ -91,7 +91,9 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
   }
       
   
-  return response.status(200)
+  return response.status(200).json({
+    type: 'success'
+  })
 })
 
 
@@ -122,7 +124,10 @@ plansRouter.post('/', async (request, response, next) => {
 
     Pending.remove(client_id, 'plan', request.body.data.plan_id)
     
-    return response.status(200)
+    return response.status(200).json({
+      type:    'info',
+      message: `Saved plan ${request.body.data.plan_id}`
+    })
     
   } catch (exception) {
     console.log(exception)

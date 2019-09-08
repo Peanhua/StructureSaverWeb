@@ -67,7 +67,7 @@ clientsRouter.post('/login', async (request, response, next) => {
     Client.setKnownPlansByCookie(cookie, [])
     Client.setKnownPlayersByCookie(cookie, [])
 
-    return response.json({
+    return response.status(200).json({
       type:   'clientLogin',
       cookie: cookie
     })
