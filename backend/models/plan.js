@@ -8,6 +8,11 @@ const Plan = db.sequelize.define('plan', {
     allowNull: false,
     unique:    true
   },
+  player_id: {
+    type:      Sequelize.STRING,
+    allowNull: false,
+    unique:    false
+  },
   data: {
     type:      Sequelize.JSON,
     allowNull: false
@@ -15,7 +20,7 @@ const Plan = db.sequelize.define('plan', {
 }, {
 })
 
-Plan.sync()
+//Plan.sync()
 
 
 Plan.getMissingPlanIds = async (having_plan_ids) => {

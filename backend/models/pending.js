@@ -22,7 +22,7 @@ const Pending = db.sequelize.define('pending', {
 }, {
 })
 
-Pending.sync()
+//Pending.sync()
 
 
 Pending.get = async (client_id, type) => {

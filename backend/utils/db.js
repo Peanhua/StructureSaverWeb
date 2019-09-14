@@ -13,6 +13,8 @@ const initialize = async () => {
   } catch (exception) {
     console.error('Unable to connect to the database:', exception);
   }
+
+  await sequelize.sync()
 }
   
 

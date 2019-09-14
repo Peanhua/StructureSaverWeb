@@ -31,7 +31,7 @@ const Client = db.sequelize.define('client', {
 }, {
 })
 
-Client.sync()
+//Client.sync()
 
 
 

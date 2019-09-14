@@ -1,6 +1,5 @@
-const Sequelize = require('sequelize')
-const db        = require('../utils/db')
-
+const Sequelize          = require('sequelize')
+const db                 = require('../utils/db')
 
 const Model = Sequelize.Model
 const PlayerMemory = db.sequelize.define('player_memory', {
@@ -17,7 +16,17 @@ const PlayerMemory = db.sequelize.define('player_memory', {
 }, {
 })
 
-PlayerMemory.sync()
+const PlayerMemoryPlanId = require('./playerMemoryPlanId')
+PlayerMemory.hasMany(PlayerMemoryPlanId, {
+  sourceKey: 'player_id',
+  foreignKey: {
+    name: 'player_id',
+    allowNull: false
+  }
+})
+
+
+//PlayerMemory.sync()
 
 
 
