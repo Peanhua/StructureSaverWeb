@@ -1,12 +1,11 @@
-const db = require('./utils/db')
-db.initialize().then(() => {
-
-  const app    = require('./app')
-  const config = require('./utils/config')
-  const http   = require('http')
-  const https  = require('https')
-  const fs     = require('fs')
+const db     = require('./utils/db')
+const app    = require('./app')
+const config = require('./utils/config')
+const http   = require('http')
+const https  = require('https')
+const fs     = require('fs')
   
+db.initialize().then(() => {
   if (config.PROTOCOL === "http") {
     const server = http.createServer(app)
     server.listen(config.PORT, () => {
