@@ -33,8 +33,8 @@ playerMemoriesRouter.post('/', async (request, response, next) => {
     })
 
     // todo: this should be done in a create function of PlayerMemory
-    mem.building_plan_ids.forEach((plan_id) => {
-      saved.addPlayerMemoryPlanId({
+    mem.building_plan_ids.forEach(async (plan_id) => {
+      PlayerMemoryPlanId.create({
         player_id: mem.player_id,
         plan_id:   plan_id
       })

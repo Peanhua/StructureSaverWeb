@@ -74,8 +74,9 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
     // todo: wait for confirmation from the client before calling addKnownPlan...() ? will then need to keep track of what we have sent and only send again after a long timeout
     await Client.addKnownPlanByCookie(cookie, plan.plan_id)
     return response.json({
-      type: 'plan',
-      plan: plan.data
+      type:      'plan',
+      player_id: plan.player_id,
+      plan:      plan.data
     })
   }
 
@@ -118,8 +119,9 @@ plansRouter.post('/', async (request, response, next) => {
     console.log('Create plan, id =', request.body.data.plan_id)
 
     await Plan.create({
-      plan_id: request.body.data.plan_id,
-      data:    request.body.data
+      player_id: request.body.player_id,
+      plan_id:   request.body.data.plan_id,
+      data:      request.body.data
     })
 
     Pending.remove(client_id, 'plan', request.body.data.plan_id)
