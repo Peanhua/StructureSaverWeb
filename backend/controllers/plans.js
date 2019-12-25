@@ -67,6 +67,10 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
     }
   }
 
+  return response.status(200).json({
+    type: 'success'
+  })
+  
   // Send plans we have but client doesn't have yet:
   const plan = await Plan.getNextPlanToSend(known_ids)
   if (plan !== null) {

@@ -20,15 +20,21 @@ const Client = db.sequelize.define('client', {
     allowNull: false,
     unique:    true
   },
-  known_plan_ids: {
-    type:      Sequelize.JSON,
-    allowNull: true
-  },
   known_player_ids: {
     type:      Sequelize.JSON,
     allowNull: true
   }
 }, {
+})
+
+
+const ClientKnownPlanId = require('./clientKnownPlanId')
+Client.hasMany(ClientKnownPlanId, {
+  sourceKey: 'client_id',
+  foreignKey: {
+    name: 'client_id',
+    allowNull: false
+  }
 })
 
 //Client.sync()
@@ -102,41 +108,79 @@ Client.checkCookie = async (cookie) => {
 
 // Known plans:
 Client.getKnownPlansByCookie = async (cookie) => {
-  //console.log(`Client.getKnownPlansByCookie(${cookie})`)
+  console.log(`Client.getKnownPlansByCookie(${cookie})`)
   const res = await Client.findOne({
+    attributes: ['client_id'],
     where: {
       cookie: cookie
     }
   })
+  const client_id = res.client_id
+  console.log('client_id =', client_id)
+  const res2 = await ClientKnownPlanId.findAll({
+    attributes: ['plan_id'],
+    where: {
+      client_id: client_id
+    }
+  })
 
-  return res.known_plan_ids
+  const rv = res2.map((r) => r.plan_id)
+  console.log('Returning: ', rv)
+
+  return rv
 }
 
 Client.setKnownPlansByCookie = async (cookie, known_plan_ids) => {
-  //  console.log('Client.setKnownPlansByCookie(cookie =', cookie, ', known_plan_ids =', known_plan_ids, ')')
-  return Client.update({
-    known_plan_ids: known_plan_ids
-  }, {
+  console.log('Client.setKnownPlansByCookie(cookie =', cookie, ', known_plan_ids =', known_plan_ids, ')')
+  const res = await Client.findOne({
+    attributes: ['client_id'],
     where: {
       cookie: cookie
     }
+  })
+  const client_id = res.client_id
+  console.log('client_id =', client_id)
+  
+  await ClientKnownPlanId.destroy({
+    where: {
+      client_id: client_id
+    }
+  })
+
+  known_plan_ids.forEach((id) => {
+    ClientKnownPlanId.create({
+      client_id: client_id,
+      plan_id:   id
+    })
   })
 }
 
 Client.addKnownPlanByCookie = async (cookie, plan_id) => {
-  //console.log('Client.addKnownPlanByCookie(cookie =', cookie, ', plan_id(s) =', plan_id, ')')
-  let known_plans = await Client.getKnownPlansByCookie(cookie)
-  if (!Array.isArray(known_plans)) {
-    known_plans = []
-  }
+  console.log('Client.addKnownPlanByCookie(cookie =', cookie, ', plan_id(s) =', plan_id, ')')
+  
+  const res = await Client.findOne({
+    attributes: ['client_id'],
+    where: {
+      cookie: cookie
+    }
+  })
+  const client_id = res.client_id
+  console.log('client_id = ', client_id)
 
   if (Array.isArray(plan_id)) {
-    known_plans = known_plans.concat(plan_id)
+    plan_id.forEach((id) => {
+      ClientKnownPlanId.create({
+        client_id: client_id,
+        plan_id:   id
+      })
+    })
+    
   } else {
-    known_plans.push(plan_id)
+    ClientKnownPlanId.create({
+      client_id: client_id,
+      plan_id:   plan_id
+    })
   }
-
-  Client.setKnownPlansByCookie(cookie, known_plans)
 }
 
 

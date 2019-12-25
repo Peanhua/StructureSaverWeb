@@ -83,7 +83,7 @@ playerMemoriesRouter.post('/synchronize', async (request, response, next) => {
     }
 
     if (plan_ids.length > 0) {
-      Client.addKnownPlanByCookie(cookie, plan_ids)
+      await Client.addKnownPlanByCookie(cookie, plan_ids)
     }
 
 
@@ -94,7 +94,7 @@ playerMemoriesRouter.post('/synchronize', async (request, response, next) => {
       })
     }
 
-    Client.addKnownPlayerByCookie(cookie, player_id)
+    await Client.addKnownPlayerByCookie(cookie, player_id)
 
 
     return response.status(200).json({
