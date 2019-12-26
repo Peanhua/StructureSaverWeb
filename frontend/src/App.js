@@ -15,15 +15,13 @@ import { loadUser }           from './reducers/loginReducer'
 
 const App = (props) => {
   useEffect(() => {
-    loadUser()
-    initializeUsers()
-  }, [])
+    props.loadUser()
+    props.initializeUsers()
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+   []
+  )
   
   const user = props.user
-
-  const spacer = () => (
-    <div className="spacer"></div>
-  )
 
   const content = () => (
     <div>

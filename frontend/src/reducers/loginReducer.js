@@ -4,7 +4,7 @@ import loginService from '../services/login'
 export const loadUser = () => {
   return async dispatch => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    if(loggedUserJSON) {
+    if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       dispatch({
         type: 'LOGIN_USER',

@@ -6,22 +6,14 @@ import { setErrorNotification } from '../reducers/notificationReducer'
 import Logo                     from './Logo'
 
 const LoginForm = (props) => {
-  const [ username, resetUsername ] = useField('text')
-  const [ password, resetPassword ] = useField('password')
+  const [ username ] = useField('text')
+  const [ password ] = useField('password')
   
   const handleLogin = async (event) => {
     event.preventDefault()
 
     try {
       await props.loginUser(username.value, password.value)
-      if(false) {
-        // This piece of code is left here only for documentation purposes.
-        // The following code is not executed, because
-        // this component is no longer being rendered after the login succeeds,
-        // and thus if we would call the resetX() functions, we would alter the state of an unmounted component.
-        resetUsername()
-        resetPassword()
-      }
 
     } catch(exception) {
       props.setErrorNotification('Incorrect username or password.', 5)
