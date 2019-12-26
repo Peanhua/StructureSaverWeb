@@ -12,7 +12,12 @@ const Users = (props) => {
     <div className="container">
       <table className="list">
         <thead>
-          <tr className="header"><th>User</th></tr>
+          <tr className="header">
+            <th>User</th>
+            <th>Is admin</th>
+            <th>Created</th>
+            <th>Last updated</th>
+          </tr>
         </thead>
         <tbody>
           {users

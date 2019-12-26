@@ -192,3 +192,7 @@ div.detailContainer div.header {
   padding-left:     4px;
   background-color: #f5e1c4;
 }
+
+div.detailContainer div.line {
+  padding-left: 8px;
+}
