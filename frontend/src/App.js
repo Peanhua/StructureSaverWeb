@@ -1,18 +1,66 @@
-import React from 'react';
-import './App.css';
+import React, { useEffect }   from 'react'
+import { connect }            from 'react-redux'
+import {
+  BrowserRouter,
+  Route
+} from 'react-router-dom'
+import Notification           from './components/Notification'
+import LoginForm              from './components/LoginForm'
+import Users                  from './components/Users'
+import UserInformation        from './components/UserInformation'
+import Logo                   from './components/Logo'
+import Navigation             from './components/Navigation'
+import { initializeUsers }    from './reducers/usersReducer'
+import { loadUser }           from './reducers/loginReducer'
 
 const App = (props) => {
+  useEffect(() => {
+    loadUser()
+    initializeUsers()
+  }, [])
+  
+  const user = props.user
+
+  const spacer = () => (
+    <div className="spacer"></div>
+  )
+
   const content = () => (
     <div>
-      
+      <Logo />
+      <Navigation />
+      <Route exact path="/users" render={() => <Users />} />
+      <Route exact path="/users/:id"
+        render={({ match }) => 
+          <UserInformation id={match.params.id} />
+        }
+      />
     </div>
   )
   
   return (
-    <div className="App">
-      {content()}
-    </div>
+    <BrowserRouter>
+      <div>
+        <Notification />
+        {user === null && <LoginForm />}
+        {user !== null && content()}
+      </div>
+    </BrowserRouter>
   )
 }
 
-export default App
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  }
+}
+
+const mapDispatchToProps = {
+  initializeUsers,
+  loadUser,
+}
+
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
+
+export default ConnectedApp
