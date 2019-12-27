@@ -33,16 +33,15 @@ usersRouter.post('/', async (request, response, next) => {
     const savedUser = await User.create({
       username:      body.username,
       name:          body.name,
-      password_hash: User.passwordToHash(body.password)
+      password_hash: await User.passwordToHash(body.password)
     })
     
-    response.json(savedUser)
+    return response.json(savedUser)
 
   } catch (exception) {
     console.log(exception)
-    next(exception)
+    return next(exception)
   }
-
 })
 
 usersRouter.get('/', async (request, response, next) => {

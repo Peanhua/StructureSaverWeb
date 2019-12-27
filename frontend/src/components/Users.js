@@ -1,7 +1,7 @@
 import React        from 'react'
 import { connect }  from 'react-redux'
 import User         from './User'
-
+import ButtonAddUser from './ButtonAddUser'
 
 const Users = (props) => {
   const users = props.users
@@ -29,6 +29,7 @@ const Users = (props) => {
           }
         </tbody>
       </table>
+      <ButtonAddUser />
     </div>
   )
 }
