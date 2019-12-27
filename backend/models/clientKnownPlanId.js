@@ -16,6 +16,5 @@ const ClientKnownPlanId = db.sequelize.define('client_known_plan_id', {
 }, {
 })
 
-//PlayerMemoryPlanId.sync()
 
 module.exports = ClientKnownPlanId

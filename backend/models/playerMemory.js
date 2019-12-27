@@ -16,15 +16,6 @@ const PlayerMemory = db.sequelize.define('player_memory', {
 }, {
 })
 
-const PlayerMemoryPlanId = require('./playerMemoryPlanId')
-PlayerMemory.hasMany(PlayerMemoryPlanId, {
-  sourceKey: 'player_id',
-  foreignKey: {
-    name: 'player_id',
-    allowNull: false
-  }
-})
-
 
 //PlayerMemory.sync()
 

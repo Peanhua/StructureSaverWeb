@@ -108,7 +108,7 @@ Client.checkCookie = async (cookie) => {
 
 // Known plans:
 Client.getKnownPlansByCookie = async (cookie) => {
-  console.log(`Client.getKnownPlansByCookie(${cookie})`)
+  //console.log(`Client.getKnownPlansByCookie(${cookie})`)
   const res = await Client.findOne({
     attributes: ['client_id'],
     where: {
@@ -116,7 +116,6 @@ Client.getKnownPlansByCookie = async (cookie) => {
     }
   })
   const client_id = res.client_id
-  console.log('client_id =', client_id)
   const res2 = await ClientKnownPlanId.findAll({
     attributes: ['plan_id'],
     where: {
@@ -125,13 +124,12 @@ Client.getKnownPlansByCookie = async (cookie) => {
   })
 
   const rv = res2.map((r) => r.plan_id)
-  console.log('Returning: ', rv)
 
   return rv
 }
 
 Client.setKnownPlansByCookie = async (cookie, known_plan_ids) => {
-  console.log('Client.setKnownPlansByCookie(cookie =', cookie, ', known_plan_ids =', known_plan_ids, ')')
+  //console.log('Client.setKnownPlansByCookie(cookie =', cookie, ', known_plan_ids =', known_plan_ids, ')')
   const res = await Client.findOne({
     attributes: ['client_id'],
     where: {
@@ -139,7 +137,6 @@ Client.setKnownPlansByCookie = async (cookie, known_plan_ids) => {
     }
   })
   const client_id = res.client_id
-  console.log('client_id =', client_id)
   
   await ClientKnownPlanId.destroy({
     where: {
@@ -156,7 +153,7 @@ Client.setKnownPlansByCookie = async (cookie, known_plan_ids) => {
 }
 
 Client.addKnownPlanByCookie = async (cookie, plan_id) => {
-  console.log('Client.addKnownPlanByCookie(cookie =', cookie, ', plan_id(s) =', plan_id, ')')
+  // console.log('Client.addKnownPlanByCookie(cookie =', cookie, ', plan_id(s) =', plan_id, ')')
   
   const res = await Client.findOne({
     attributes: ['client_id'],
@@ -165,7 +162,6 @@ Client.addKnownPlanByCookie = async (cookie, plan_id) => {
     }
   })
   const client_id = res.client_id
-  console.log('client_id = ', client_id)
 
   if (Array.isArray(plan_id)) {
     plan_id.forEach((id) => {

@@ -13,6 +13,11 @@ const Plan = db.sequelize.define('plan', {
     allowNull: false,
     unique:    false
   },
+  plan_name: {
+    type:      Sequelize.STRING,
+    allowNull: true,
+    unique:    false
+  },
   data: {
     type:      Sequelize.JSON,
     allowNull: false
@@ -20,11 +25,12 @@ const Plan = db.sequelize.define('plan', {
 }, {
 })
 
+
 //Plan.sync()
 
 
 Plan.getMissingPlanIds = async (having_plan_ids) => {
-  console.log('Plan.getMissingPlanIds(having_plan_ids =', having_plan_ids, ')')
+  //console.log('Plan.getMissingPlanIds(having_plan_ids =', having_plan_ids, ')')
   const existing_ids = await Plan.findAll({
     attributes: ['plan_id'],
     where: {
@@ -40,7 +46,7 @@ Plan.getMissingPlanIds = async (having_plan_ids) => {
 }
 
 Plan.getPlanIdsNotListed = async (listed_plan_ids) => {
-  console.log(`Plan.getPlanIdsNotListed(${listed_plan_ids})`)
+  //console.log(`Plan.getPlanIdsNotListed(${listed_plan_ids})`)
   const res = await Plan.findAll({
     attributes: ['plan_id'],
     where: {

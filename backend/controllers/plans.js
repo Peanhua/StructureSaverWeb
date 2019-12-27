@@ -1,3 +1,4 @@
+const Sequelize    = require('sequelize')
 const plansRouter  = require('express').Router()
 const Plan         = require('../models/plan')
 const Client       = require('../models/client')
@@ -95,6 +96,27 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
   return response.status(200).json({
     type: 'success'
   })
+})
+
+
+plansRouter.get('/', async (request, response, next) => {
+  try {
+    const plans = await Plan.findAll()
+
+    const jsonPlans = plans.map((plan) => {
+      return {
+        id:        plan.plan_id,
+        player_id: plan.player_id,
+        name:      plan.plan_name,
+        createdAt: plan.createdAt,
+        updatedAt: plan.updatedAt
+      }
+    })
+    response.json(jsonPlans)
+
+  } catch (exception) {
+    next(exception)
+  }
 })
 
 

@@ -1,8 +1,8 @@
 const playerMemoriesRouter = require('express').Router()
 const PlayerMemory         = require('../models/playerMemory')
+const Plan                 = require('../models/plan')
 const Client               = require('../models/client')
 const Pending              = require('../models/pending')
-const PlayerMemoryPlanId   = require('../models/playerMemoryPlanId')
 
 
 playerMemoriesRouter.post('/', async (request, response, next) => {
@@ -32,13 +32,16 @@ playerMemoriesRouter.post('/', async (request, response, next) => {
       memory:    mem
     })
 
-    // todo: this should be done in a create function of PlayerMemory
-    mem.building_plan_ids.forEach(async (plan_id) => {
-      PlayerMemoryPlanId.create({
-        player_id: mem.player_id,
-        plan_id:   plan_id
+    // Update the names of the plans:
+    for (let i = 0; i < mem.building_plan_ids.length; i++) {
+      Plan.update({
+        plan_name: mem.building_plan_names[i]
+      }, {
+        where: {
+          plan_id: mem.building_plan_ids[i]
+        }
       })
-    })
+    }
 
     Pending.remove(client_id, 'playermem', mem.player_id)
 

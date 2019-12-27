@@ -8,15 +8,19 @@ import Notification           from './components/Notification'
 import LoginForm              from './components/LoginForm'
 import Users                  from './components/Users'
 import UserInformation        from './components/UserInformation'
+import Plans                  from './components/Plans'
+import PlanInformation        from './components/PlanInformation'
 import Logo                   from './components/Logo'
 import Navigation             from './components/Navigation'
 import { initializeUsers }    from './reducers/usersReducer'
+import { initializePlans }    from './reducers/plansReducer'
 import { loadUser }           from './reducers/loginReducer'
 
 const App = (props) => {
   useEffect(() => {
     props.loadUser()
     props.initializeUsers()
+    props.initializePlans()
   }, // eslint-disable-next-line react-hooks/exhaustive-deps
    []
   )
@@ -27,6 +31,12 @@ const App = (props) => {
     <div>
       <Logo />
       <Navigation />
+      <Route exact path="/plans" render={() => <Plans />} />
+      <Route exact path="/plans/:id"
+        render={({ match }) => 
+          <PlanInformation id={match.params.id} />
+        }
+      />
       <Route exact path="/users" render={() => <Users />} />
       <Route exact path="/users/:id"
         render={({ match }) => 
@@ -56,6 +66,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   initializeUsers,
+  initializePlans,
   loadUser,
 }
 
