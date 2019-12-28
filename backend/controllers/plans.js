@@ -11,10 +11,10 @@ const auth         = require('../utils/auth')
 plansRouter.post('/getUpdate', async (request, response, next) => {
   console.log('plansRouter.getUpdate()')
 
-  const cookie = await auth.checkClient(request, response)
+  const [ cookie, client_id ] = await auth.checkClient(request, response)
   if (cookie === null)
     return
-
+  
   const known_ids = await Client.getKnownPlansByCookie(cookie)
 
   // Request the client to send us all the plans we don't have yet:
@@ -122,7 +122,7 @@ plansRouter.post('/', async (request, response, next) => {
   try {
     const body = request.body
 
-    const cookie = await auth.checkClient(request, response)
+    const [ cookie, client_id ] = await auth.checkClient(request, response)
     if (cookie === null)
       return
 

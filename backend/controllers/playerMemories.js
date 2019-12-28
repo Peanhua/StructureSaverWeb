@@ -9,7 +9,7 @@ playerMemoriesRouter.post('/', async (request, response, next) => {
   try {
     const body = request.body
 
-    const cookie = await auth.checkClient(request, response)
+    const [ cookie, client_id ] = await auth.checkClient(request, response)
     if (cookie === null)
       return
 
@@ -50,7 +50,7 @@ playerMemoriesRouter.post('/synchronize', async (request, response, next) => {
     console.log('playerMemoriesRouter.synchronize()')
     const body = request.body
 
-    const cookie = await auth.checkClient(request, response)
+    const [ cookie, client_id ] = await auth.checkClient(request, response)
     if (cookie === null)
       return
 

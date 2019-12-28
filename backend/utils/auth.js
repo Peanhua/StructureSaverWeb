@@ -19,7 +19,10 @@ const checkClient = async (request, response) => {
     return null
   }
 
-  return cookie
+  return [
+    cookie,
+    client_id
+  ]
 }
 
 const checkFrontend = (request, response, must_be_admin) => {
