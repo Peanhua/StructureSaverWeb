@@ -3,25 +3,15 @@ const PlayerMemory         = require('../models/playerMemory')
 const Plan                 = require('../models/plan')
 const Client               = require('../models/client')
 const Pending              = require('../models/pending')
-
+const auth                 = require('../utils/auth')
 
 playerMemoriesRouter.post('/', async (request, response, next) => {
   try {
     const body = request.body
 
-    const cookie = body.cookie
-    if (cookie === undefined) {
-      return response.status(400).json({
-        error: 'Missing cookie.'
-      })
-    }
-
-    const client_id = await Client.checkCookie(cookie)
-    if (client_id === null) {
-      return response.status(400).json({
-        error: 'Not logged in.'
-      })
-    }
+    const cookie = await auth.checkClient(request, response)
+    if (cookie === null)
+      return
 
     const mem = body.data
     
@@ -45,12 +35,12 @@ playerMemoriesRouter.post('/', async (request, response, next) => {
 
     Pending.remove(client_id, 'playermem', mem.player_id)
 
-    return response.status(200).json({
+    response.status(200).json({
       type: 'success'
     })
     
   } catch (exception) {
-    return next(exception)
+    next(exception)
   }
 })
 
@@ -60,29 +50,23 @@ playerMemoriesRouter.post('/synchronize', async (request, response, next) => {
     console.log('playerMemoriesRouter.synchronize()')
     const body = request.body
 
-    const cookie = body.cookie
-    if (cookie === undefined) {
-      return response.status(400).json({
-        error: 'Missing cookie.'
-      })
-    }
-    if (await Client.checkCookie(cookie) === null) {
-      return response.status(400).json({
-        error: 'Not logged in.'
-      })
-    }
+    const cookie = await auth.checkClient(request, response)
+    if (cookie === null)
+      return
 
     const plan_ids = body.plan_ids
     if (plan_ids === undefined) {
-      return response.status(400).json({
+      response.status(400).json({
         error: 'Missing plan_ids.'
       })
+      return
     }
 
     if (! Array.isArray(plan_ids)) {
-      return response.status(400).json({
+      response.status(400).json({
         error: 'Incorrect type for plan_ids.'
       })
+      return
     }
 
     if (plan_ids.length > 0) {
@@ -92,21 +76,22 @@ playerMemoriesRouter.post('/synchronize', async (request, response, next) => {
 
     const player_id = body.player_id
     if (player_id === undefined) {
-      return response.status(400).json({
+      response.status(400).json({
         error: 'Missing player_id.'
       })
+      return
     }
 
     await Client.addKnownPlayerByCookie(cookie, player_id)
 
 
-    return response.status(200).json({
+    response.status(200).json({
       type: 'synchronize'
     })
 
   } catch (exception) {
     console.log(exception)
-    return next(exception)
+    next(exception)
   }
 })
 

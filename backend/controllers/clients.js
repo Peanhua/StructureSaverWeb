@@ -1,39 +1,37 @@
 const clientsRouter = require('express').Router()
 const Client        = require('../models/client')
 const Pending       = require('../models/pending')
-
+const auth          = require('../utils/auth')
 
 clientsRouter.post('/', async (request, response, next) => {
   try {
+    const user = auth.checkFrontend(request, response, true)
+    if (user === null)
+      return
+    
     const body = request.body
 
     const client_id = body.client_id
     if (client_id === undefined) {
-      return response.status(400).json({
+      response.status(400).json({
         error: 'Missing client_id.'
       })
+      return
     }
 
     const password = body.password
     if (password === undefined) {
-      return response.status(400).json({
+      response.status(400).json({
         error: 'Missing password.'
       })
+      return
     }
-    const password_hash = await Client.passwordToHash(password)
 
-    const cookie = await Client.createCookie(client_id, password_hash)
-
-    const saved = await Client.create({
-      client_id:     client_id,
-      password_hash: password_hash,
-      cookie:        cookie
-    })
-
-    return response.json(saved)
+    const saved = Client.createNewClient(client_id, password)
+    response.json(saved)
     
   } catch (exception) {
-    return next(exception)
+    next(exception)
   }
 })
 

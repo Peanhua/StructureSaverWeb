@@ -41,13 +41,13 @@ Client.hasMany(ClientKnownPlanId, {
 
 
 
-Client.passwordToHash = async (password) => {
+const passwordToHash = async (password) => {
   const salt_rounds = 10
   return await bcrypt.hash(password, salt_rounds)
 }
 
 
-Client.createCookie = async (client_id, password_hash) => {
+const createCookie = async (client_id, password_hash) => {
   // todo: don't use password_hash for making this unique
   const secret = 'verisiikret' // todo: read from ini, add some random stuff into it
   const salt_rounds = 3
@@ -67,6 +67,21 @@ Client.createCookie = async (client_id, password_hash) => {
 }
 
 
+Client.createNewClient = async (client_id, password) => {
+  const password_hash = await passwordToHash(password)
+  
+  const cookie = await createCookie(client_id, password_hash)
+  
+  const saved = await Client.create({
+    client_id:     client_id,
+    password_hash: password_hash,
+    cookie:        cookie
+  })
+
+  return saved
+}
+
+
 Client.authenticate = async (client_id, password) => {
   //console.log('Client.authenticate(client_id =' , client_id, ' password =', password, ')')
   const client = await Client.findOne({
@@ -83,7 +98,7 @@ Client.authenticate = async (client_id, password) => {
     return null
   }
   
-  const cookie = await Client.createCookie(client_id, client.password_hash)
+  const cookie = await createCookie(client_id, client.password_hash)
   
   return cookie
 }

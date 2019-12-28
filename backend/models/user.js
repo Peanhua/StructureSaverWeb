@@ -34,23 +34,4 @@ User.passwordToHash = async (password) => {
 }
 
 
-const initialize = async () => {
-  await User.sync()
-  
-  const res = await User.findAll()
-
-  if (res.length === 0) {
-    const password_hash = await User.passwordToHash('aaa')
-    
-    User.create({
-      username:      'root',
-      name:          'Administrator',
-      password_hash: password_hash,
-      is_admin:      true
-    })
-  }
-}
-
-initialize()
-
 module.exports = User

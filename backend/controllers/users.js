@@ -1,33 +1,42 @@
 const usersRouter = require('express').Router()
 const User        = require('../models/user')
+const auth        = require('../utils/auth')
 
 usersRouter.post('/', async (request, response, next) => {
   try {
+    const user = auth.checkFrontend(request, response, true)
+    if (user === null)
+      return
+
     const body = request.body
 
     if(body.username === undefined) {
-      return response.status(400).json({
+      response.status(400).json({
         error: 'missing username'
       })
+      return
     }
     
     if(body.password === undefined) {
-      return response.status(400).json({
+      response.status(400).json({
         error: 'missing password'
       })
+      return
     }
 
     if(body.name === undefined) {
-      return response.status(400).json({
+      response.status(400).json({
         error: 'missing name'
       })
+      return
     }
       
 
     if(body.password.length < 3) {
-      return response.status(400).json({
+      response.status(400).json({
         error: 'password is too short'
       })
+      return
     }
 
     const savedUser = await User.create({
@@ -36,16 +45,20 @@ usersRouter.post('/', async (request, response, next) => {
       password_hash: await User.passwordToHash(body.password)
     })
     
-    return response.json(savedUser)
+    response.json(savedUser)
 
   } catch (exception) {
     console.log(exception)
-    return next(exception)
+    next(exception)
   }
 })
 
 usersRouter.get('/', async (request, response, next) => {
   try {
+    const user = auth.checkFrontend(request, response, false)
+    if (user === null)
+      return
+    
     const users = await User.findAll()
 
     response.json(users)

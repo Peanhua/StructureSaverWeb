@@ -9,7 +9,6 @@ const sequelize = new Sequelize('structuresaver', null, null, {
 const initialize = async () => {
   try {
     await sequelize.authenticate()
-    console.log('Connection to the database has been established successfully.')
   } catch (exception) {
     console.error('Unable to connect to the database:', exception);
   }
