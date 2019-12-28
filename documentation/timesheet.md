@@ -24,5 +24,6 @@ Time used for the project, not including time used for the game mod portion.
   <tr><td>      </td><td>  1.00</td><td>Add new user functionality.</td></tr>
   <tr><td>28.12.</td><td>  1.25</td><td>Authentication/security.</td></tr>
   <tr><td>      </td><td>  1.00</td><td>Database setup system/tools.</td></tr>
-  <tr><th>Total</th><th> 27.00</th><th></th></tr>
+  <tr><td>      </td><td>  1.00</td><td>Client listing and adding through frontend.</td></tr>
+  <tr><th>Total</th><th> 28.00</th><th></th></tr>
 </table>
