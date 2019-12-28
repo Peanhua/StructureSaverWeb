@@ -1,5 +1,6 @@
 const jwt    = require('jsonwebtoken')
 const Client = require('../models/client')
+const config = require('./config')
 
 const checkClient = async (request, response) => {
   const cookie = request.body.cookie
@@ -27,7 +28,7 @@ const checkFrontend = (request, response, must_be_admin) => {
     return null
   }
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  const decodedToken = jwt.verify(request.token, config.JWTSECRET)
 
   if(!decodedToken.id) {
     response.status(401).json({ error: 'Missing token' })

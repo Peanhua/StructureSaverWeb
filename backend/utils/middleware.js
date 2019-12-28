@@ -1,4 +1,5 @@
 const logger = require('./logger')
+const config = require('./config')
 
 const requestLogger = (request, response, next) => {
   logger.info('---')
@@ -15,7 +16,7 @@ const unknownEndpoint = (request, response) => {
 }
 
 const errorHandler = (error, request, response, next) => {
-  //  if(process.env.NODE_ENV !== 'test')
+  //  if(config.NODE_ENV !== 'test')
   logger.error("ERROR:", error.message)
 
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
