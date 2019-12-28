@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize')
+const config    = require('./config')
 
-const sequelize = new Sequelize('structuresaver', null, null, {
+const sequelize = new Sequelize(config.DATABASE_NAME, null, null, {
   dialect: 'postgres',
   host: '/tmp',
   logging: false

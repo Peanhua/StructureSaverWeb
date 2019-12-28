@@ -3,6 +3,9 @@ require('dotenv')
     silent: process.env.NODE_ENV === 'production'
   })
 
+// Mandatory settings:
+const DATABASE_NAME = process.env.DATABASE_NAME
+// Optional settings:
 const PORT      = process.env.PORT      !== undefined ? process.env.PORT :      3001
 const PROTOCOL  = process.env.PROTOCOL  !== undefined ? process.env.PROTOCOL :  "http"
 const CERT      = process.env.CERT      !== undefined ? process.env.CERT :      "cert.pem"
@@ -16,5 +19,6 @@ module.exports = {
   CERT,
   CERT_KEY,
   JWTSECRET,
-  NODE_ENV
+  NODE_ENV,
+  DATABASE_NAME
 }
