@@ -22,6 +22,7 @@ Time used for the project, not including time used for the game mod portion.
   <tr><td>26.12.</td><td>  3.00</td><td>Basic frontend work, logging in and users listing.</td></tr>
   <tr><td>27.12.</td><td>  2.00</td><td>Plan listing in front end.</td></tr>
   <tr><td>      </td><td>  1.00</td><td>Add new user functionality.</td></tr>
-  <tr><td>28.12.</td><td>  1.00</td><td>Authentication/security.</td></tr>
-  <tr><th>Total</th><th> 25.75</th><th></th></tr>
+  <tr><td>28.12.</td><td>  1.25</td><td>Authentication/security.</td></tr>
+  <tr><td>      </td><td>  1.00</td><td>Database setup system/tools.</td></tr>
+  <tr><th>Total</th><th> 27.00</th><th></th></tr>
 </table>
