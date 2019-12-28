@@ -27,8 +27,33 @@ clientsRouter.post('/', async (request, response, next) => {
       return
     }
 
-    const saved = Client.createNewClient(client_id, password)
+    const saved = await Client.createNewClient(client_id, password)
     response.json(saved)
+    
+  } catch (exception) {
+    next(exception)
+  }
+})
+
+
+clientsRouter.get('/', async (request, response, next) => {
+  try {
+    const user = auth.checkFrontend(request, response, false)
+    if (user === null)
+      return
+
+    const clients = await Client.findAll()
+
+    const jsonClients = clients.map((client) => {
+      return {
+        id:        client.id,
+        client_id: client.client_id,
+        createdAt: client.createdAt,
+        updatedAt: client.updatedAt
+      }
+    })
+
+    response.json(jsonClients)
     
   } catch (exception) {
     next(exception)

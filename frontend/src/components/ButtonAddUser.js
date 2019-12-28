@@ -32,7 +32,7 @@ const ButtonAddUser = (props) => {
     event.preventDefault()
 
     if (username.value.length === 0) {
-      props.setErrorNotification('Require field username is empty.', 3)
+      props.setErrorNotification('Required field username is empty.', 3)
       return
     }
     if (password.value.length === 0) {

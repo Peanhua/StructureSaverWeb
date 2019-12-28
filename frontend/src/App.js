@@ -10,10 +10,13 @@ import Users                  from './components/Users'
 import UserInformation        from './components/UserInformation'
 import Plans                  from './components/Plans'
 import PlanInformation        from './components/PlanInformation'
+import Clients                from './components/Clients'
+import ClientInformation      from './components/ClientInformation'
 import Logo                   from './components/Logo'
 import Navigation             from './components/Navigation'
 import { initializeUsers }    from './reducers/usersReducer'
 import { initializePlans }    from './reducers/plansReducer'
+import { initializeClients }  from './reducers/clientsReducer'
 import { loadUser }           from './reducers/loginReducer'
 
 const App = (props) => {
@@ -21,6 +24,7 @@ const App = (props) => {
     props.loadUser()
     props.initializeUsers()
     props.initializePlans()
+    props.initializeClients()
   }, // eslint-disable-next-line react-hooks/exhaustive-deps
    []
   )
@@ -41,6 +45,12 @@ const App = (props) => {
       <Route exact path="/users/:id"
         render={({ match }) => 
           <UserInformation id={match.params.id} />
+        }
+      />
+      <Route exact path="/clients" render={() => <Clients />} />
+      <Route exact path="/clients/:id"
+        render={({ match }) => 
+          <ClientInformation id={match.params.id} />
         }
       />
     </div>
@@ -67,6 +77,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   initializeUsers,
   initializePlans,
+  initializeClients,
   loadUser,
 }
 
