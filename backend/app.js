@@ -13,6 +13,7 @@ app.use(bodyParser.json({
   limit: '1GB'
 }))
 app.use(middleware.requestLogger)
+app.use(middleware.tokenExtractor)
 app.use('/api/clients',        clientsRouter)
 app.use('/api/login',          loginRouter)
 app.use('/api/plans',          plansRouter)

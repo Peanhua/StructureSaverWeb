@@ -1,5 +1,6 @@
 import loginService from '../services/login'
 import usersService from '../services/users'
+import plansService from '../services/plans'
 
 /* Action creators: */
 export const loadUser = () => {
@@ -8,6 +9,7 @@ export const loadUser = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       usersService.setToken(user.token)
+      plansService.setToken(user.token)
       dispatch({
         type: 'LOGIN_USER',
         user: user
@@ -24,6 +26,7 @@ export const loginUser = (username, password) => {
     })
     window.localStorage.setItem('loggedUser', JSON.stringify(user))
     usersService.setToken(user.token)
+    plansService.setToken(user.token)
     dispatch({
       type: 'LOGIN_USER',
       user: user
@@ -35,6 +38,7 @@ export const logoutUser = () => {
   return async dispatch => {
     window.localStorage.removeItem('loggedUser')
     usersService.setToken(null)
+    plansService.setToken(null)
     dispatch({
       type: 'LOGOUT_USER'
     })

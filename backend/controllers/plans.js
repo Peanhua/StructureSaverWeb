@@ -4,26 +4,16 @@ const Plan         = require('../models/plan')
 const Client       = require('../models/client')
 const Pending      = require('../models/pending')
 const PlayerMemory = require('../models/playerMemory')
-
+const auth         = require('../utils/auth')
 
 
 // todo: move /getUpdate to client controller
 plansRouter.post('/getUpdate', async (request, response, next) => {
   console.log('plansRouter.getUpdate()')
-  
-  const cookie = request.body.cookie
-  if (cookie === undefined) {
-    return response.status(400).json({
-      error: 'Missing cookie.'
-    })
-  }
 
-  const client_id = await Client.checkCookie(cookie)
-  if (client_id === null) {
-    return response.status(400).json({
-      error: 'Not logged in.'
-    })
-  }
+  const cookie = await auth.checkClient(request, response)
+  if (cookie === null)
+    return
 
   const known_ids = await Client.getKnownPlansByCookie(cookie)
 
@@ -39,10 +29,11 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
 
       Pending.add(client_id, 'plan', request_ids)
       
-      return response.json({
+      response.json({
         type:     'sendPlans',
         plan_ids: request_ids
       })
+      return
     }
   }
 
@@ -61,10 +52,11 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
 
       Pending.add(client_id, 'playermem', request_ids)
 
-      return response.json({
+      response.json({
         type:       'sendPlayerMemories',
         player_ids: request_ids
       })
+      return
     }
   }
 
@@ -74,11 +66,12 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
     console.log('Sending plan', plan.plan_id)
     // todo: wait for confirmation from the client before calling addKnownPlan...() ? will then need to keep track of what we have sent and only send again after a long timeout
     await Client.addKnownPlanByCookie(cookie, plan.plan_id)
-    return response.json({
+    response.json({
       type:      'plan',
       player_id: plan.player_id,
       plan:      plan.data
     })
+    return
   }
 
   // Send player memories we have but client doesn't have yet:
@@ -86,14 +79,15 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
   if (mem !== null) {
     console.log('Sending player memory', mem.player_id)
     await Client.addKnownPlayerByCookie(cookie, mem.player_id)
-    return response.json({
+    response.json({
       type:         'playerMemory',
       playerMemory: mem.memory
     })
+    return
   }
       
   
-  return response.status(200).json({
+  response.status(200).json({
     type: 'success'
   })
 })
@@ -101,6 +95,10 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
 
 plansRouter.get('/', async (request, response, next) => {
   try {
+    const user = auth.checkFrontend(request, response, false)
+    if (user === null)
+      return
+    
     const plans = await Plan.findAll()
 
     const jsonPlans = plans.map((plan) => {
@@ -124,19 +122,10 @@ plansRouter.post('/', async (request, response, next) => {
   try {
     const body = request.body
 
-    const cookie = body.cookie
-    if (cookie === undefined) {
-      return response.status(400).json({
-        error: 'Missing cookie.'
-      })
-    }
+    const cookie = await auth.checkClient(request, response)
+    if (cookie === null)
+      return
 
-    const client_id = await Client.checkCookie(cookie)
-    if (client_id === null) {
-      return response.status(400).json({
-        error: 'Not logged in.'
-      })
-    }
     // todo: add some checks for the validity of data, at minimum check the existence of plan_id
     console.log('Create plan, id =', request.body.data.plan_id)
 
@@ -148,14 +137,14 @@ plansRouter.post('/', async (request, response, next) => {
 
     Pending.remove(client_id, 'plan', request.body.data.plan_id)
     
-    return response.status(200).json({
+    response.status(200).json({
       type:    'info',
       message: `Saved plan ${request.body.data.plan_id}`
     })
     
   } catch (exception) {
     console.log(exception)
-    return next(exception)
+    next(exception)
   }
 })
 
