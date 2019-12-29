@@ -53,6 +53,36 @@ usersRouter.post('/', async (request, response, next) => {
   }
 })
 
+
+usersRouter.delete('/:id', async (request, response, next) => {
+  try {
+    const user = auth.checkFrontend(request, response, true)
+    if (user === null)
+      return
+
+    const deleteuser = await User.findOne({
+      where: {
+        id: request.params.id
+      }
+    })
+    if (deleteuser === null) {
+      response.status(404).json({ error: 'User not found error' })
+      return
+    }
+
+    if (user.id === deleteuser.id) {
+      response.status(400).json({ error: 'Not allowed to delete your own user account' })
+      return
+    }
+
+    await deleteuser.destroy()
+    response.status(204).end()
+    
+  } catch (exception) {
+    next(exception)
+  }
+})
+
 usersRouter.get('/', async (request, response, next) => {
   try {
     const user = auth.checkFrontend(request, response, false)

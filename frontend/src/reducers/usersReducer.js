@@ -21,6 +21,16 @@ export const addUser = (user) => {
   }
 }
 
+export const deleteUser = (user) => {
+  return async dispatch => {
+    await usersService.deleteUser(user.id)
+    dispatch({
+      type: 'DELETE_USER',
+      id:   user.id
+    })
+  }
+}
+
 
 /* The reducer: */
 const initialState = []
@@ -35,7 +45,10 @@ const reducer = (state = initialState, action) => {
       const ns = state.concat(action.user)
       return ns
     }
-    
+    case 'DELETE_USER': {
+      const ns = state.filter(plan => plan.id !== action.id)
+      return ns
+    }
     default: {
       return state
     }

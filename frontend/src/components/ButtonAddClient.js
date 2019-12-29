@@ -46,7 +46,6 @@ const ButtonAddClient = (props) => {
     try {
       newclientFormRef.current.toggleVisibility()
 
-      console.log(props.addClient)
       await props.addClient(newClient)
 
       props.setNotification(`New client '${newClient.client_id}' was added.`, 5)

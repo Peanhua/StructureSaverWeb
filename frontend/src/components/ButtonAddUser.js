@@ -58,7 +58,6 @@ const ButtonAddUser = (props) => {
     try {
       newuserFormRef.current.toggleVisibility()
 
-      console.log(props.addUser)
       await props.addUser(newUser)
 
       props.setNotification(`New user '${newUser.name}' was added.`, 5)
