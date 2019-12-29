@@ -19,10 +19,6 @@ const Client = db.sequelize.define('client', {
     type:      Sequelize.STRING,
     allowNull: false,
     unique:    true
-  },
-  known_player_ids: {
-    type:      Sequelize.JSON,
-    allowNull: true
   }
 }, {
 })
@@ -196,46 +192,6 @@ Client.addKnownPlanByCookie = async (cookie, plan_id) => {
 
 
 
-// Known players:
-// todo: could share the same code with known plans -stuff
-// todo: instead of using cookie, use the client_id because we have it anyway
-Client.getKnownPlayersByCookie = async (cookie) => {
-  //console.log(`Client.getKnownPlayersByCookie(${cookie})`)
-  const res = await Client.findOne({
-    where: {
-      cookie: cookie
-    }
-  })
-
-  return res.known_player_ids
-}
-
-Client.setKnownPlayersByCookie = async (cookie, known_player_ids) => {
-  //console.log('Client.setKnownPlayersByCookie(cookie =', cookie, ', known_player_ids =', known_player_ids, ')')
-  return Client.update({
-    known_player_ids: known_player_ids
-  }, {
-    where: {
-      cookie: cookie
-    }
-  })
-}
-
-Client.addKnownPlayerByCookie = async (cookie, player_id) => {
-  //console.log('Client.addKnownPlayerByCookie(cookie =', cookie, ', player_id(s) =', player_id, ')')
-  let known_players = await Client.getKnownPlayersByCookie(cookie)
-  if (!Array.isArray(known_players)) {
-    known_players = []
-  }
-
-  if (Array.isArray(player_id)) {
-    known_players = known_players.concat(player_id)
-  } else {
-    known_players.push(player_id)
-  }
-
-  Client.setKnownPlayersByCookie(cookie, known_players)
-}
 
 
 
