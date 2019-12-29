@@ -42,7 +42,7 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
   
   // Request the client to send us all the player memories we don't have yet:
   // todo: reuse the same code as for plans
-  const missing_players = await PlayerMemory.getMissingPlayerIds(known_players)
+  const missing_players = await getMissingPlayerIds(known_players)
   if (missing_players.length > 0) {
     const already_requested_ids = await Pending.get(client_id, 'playermem')
     const request_ids = missing_players.filter(id => !already_requested_ids.find((find_id) => { return find_id === id }))
@@ -174,6 +174,23 @@ plansRouter.post('/', async (request, response, next) => {
     next(exception)
   }
 })
+
+
+const getMissingPlayerIds = async (having_player_ids) => {
+  //console.log('getMissingPlayerIds(having_player_ids =', having_player_ids, ')')
+  const ids = await Plan.findAll({
+    attributes: [Sequelize.fn('DISTINCT', Sequelize.col('player_id')) ,'player_id'],
+    where: {
+      player_id: {
+        [Sequelize.Op.in]: having_player_ids
+      },
+      plan_name: null
+    }
+  }).map(plan => plan.player_id)
+  
+  return ids
+}
+
 
 
 

@@ -21,22 +21,6 @@ const PlayerMemory = db.sequelize.define('player_memory', {
 
 
 
-PlayerMemory.getMissingPlayerIds = async (having_player_ids) => {
-  //console.log('getMissingPlayerIds(having_player_ids =', having_player_ids, ')')
-  const existing_ids = await PlayerMemory.findAll({
-    attributes: ['player_id'],
-    where: {
-      player_id: {
-        [Sequelize.Op.in]: having_player_ids
-      }
-    }
-  }).map(player => player.player_id)
-  
-  const missing_player_ids = having_player_ids.filter(id => !existing_ids.find((find_id) => { return find_id === id }))
-
-  return missing_player_ids
-}
-
 PlayerMemory.getPlayerIdsNotListed = async (listed_player_ids) => {
   //console.log(`getPlayerIdsNotListed(${listed_player_ids})`)
   const res = await PlayerMemory.findAll({
