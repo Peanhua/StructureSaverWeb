@@ -11,7 +11,7 @@ const ClientInformation = (props) => {
   return (
     <div className="detailContainer">
       <div className="header">{client.client_id}</div>
-      <div className="line">Id: {client.id}</div>
+      <div className="line">Database Id: {client.id}</div>
       <div className="line">Created: {client.createdAt}</div>
       <div className="line">Updated: {client.updatedAt}</div>
     </div>

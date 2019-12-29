@@ -103,7 +103,8 @@ plansRouter.get('/', async (request, response, next) => {
 
     const jsonPlans = plans.map((plan) => {
       return {
-        id:        plan.plan_id,
+        id:        plan.id,
+        plan_id:   plan.plan_id,
         player_id: plan.player_id,
         name:      plan.plan_name,
         createdAt: plan.createdAt,
@@ -112,6 +113,32 @@ plansRouter.get('/', async (request, response, next) => {
     })
     response.json(jsonPlans)
 
+  } catch (exception) {
+    next(exception)
+  }
+})
+
+
+plansRouter.get('/:id', async (request, response, next) => {
+  try {
+    const plan = await Plan.findOne({
+      where: {
+        id: request.params.id
+      }
+    })
+    const jsonPlan = {
+      id:        plan.id,
+      plan_id:   plan.plan_id,
+      player_id: plan.player_id,
+      name:      plan.plan_name,
+      createdAt: plan.createdAt,
+      updatedAt: plan.updatedAt,
+      version:   plan.data.version,
+      pieces:    plan.data.pieces
+    }
+
+    return response.json(jsonPlan)
+    
   } catch (exception) {
     next(exception)
   }
