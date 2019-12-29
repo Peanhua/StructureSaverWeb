@@ -1,5 +1,7 @@
-import React        from 'react'
-import { connect }  from 'react-redux'
+import React              from 'react'
+import { connect }        from 'react-redux'
+import Spacer             from './Spacer'
+import ButtonDeleteClient from './ButtonDeleteClient'
 
 const ClientInformation = (props) => {
   const client = props.clients.find((u) => u.id === parseInt(props.id))
@@ -11,9 +13,12 @@ const ClientInformation = (props) => {
   return (
     <div className="detailContainer">
       <div className="header">{client.client_id}</div>
+      <Spacer />
       <div className="line">Database Id: {client.id}</div>
-      <div className="line">Created: {client.createdAt}</div>
-      <div className="line">Updated: {client.updatedAt}</div>
+      <div className="line">Added to database: {client.createdAt}</div>
+      <div className="line">Last database update: {client.updatedAt}</div>
+      <Spacer />
+      <ButtonDeleteClient id={client.id} />
     </div>
   )
 }

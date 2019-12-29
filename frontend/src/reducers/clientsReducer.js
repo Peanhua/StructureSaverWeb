@@ -21,6 +21,16 @@ export const addClient = (client) => {
   }
 }
 
+export const deleteClient = (client) => {
+  return async dispatch => {
+    await clientsService.deleteClient(client.id)
+    dispatch({
+      type: 'DELETE_CLIENT',
+      id:   client.id
+    })
+  }
+}
+
 
 /* The reducer: */
 const initialState = []
@@ -33,6 +43,10 @@ const reducer = (state = initialState, action) => {
     }
     case 'ADD_CLIENT': {
       const ns = state.concat(action.client)
+      return ns
+    }
+    case 'DELETE_CLIENT': {
+      const ns = state.filter(client => client.id !== action.id)
       return ns
     }
     default: {

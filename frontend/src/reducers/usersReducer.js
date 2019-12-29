@@ -46,7 +46,7 @@ const reducer = (state = initialState, action) => {
       return ns
     }
     case 'DELETE_USER': {
-      const ns = state.filter(plan => plan.id !== action.id)
+      const ns = state.filter(user => user.id !== action.id)
       return ns
     }
     default: {

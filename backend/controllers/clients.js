@@ -36,6 +36,31 @@ clientsRouter.post('/', async (request, response, next) => {
 })
 
 
+clientsRouter.delete('/:id', async (request, response, next) => {
+  try {
+    const user = auth.checkFrontend(request, response, true)
+    if (user === null)
+      return
+
+    const deleteclient = await Client.findOne({
+      where: {
+        id: request.params.id
+      }
+    })
+    if (deleteclient === null) {
+      response.status(404).json({ error: 'Client not found error' })
+      return
+    }
+
+    await deleteclient.destroy()
+    response.status(204).end()
+    
+  } catch (exception) {
+    next(exception)
+  }
+})
+
+
 clientsRouter.get('/', async (request, response, next) => {
   try {
     const user = auth.checkFrontend(request, response, false)
