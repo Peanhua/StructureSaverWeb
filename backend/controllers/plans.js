@@ -3,8 +3,46 @@ const plansRouter  = require('express').Router()
 const Plan         = require('../models/plan')
 const Client       = require('../models/client')
 const Pending      = require('../models/pending')
-const PlayerMemory = require('../models/playerMemory')
 const auth         = require('../utils/auth')
+
+
+plansRouter.post('/synchronize', async (request, response, next) => {
+  try {
+    console.log('plansRouter.synchronize()')
+    const body = request.body
+
+    const [ cookie, client_id ] = await auth.checkClient(request, response)
+    if (cookie === null)
+      return
+
+    const plan_ids = body.plan_ids
+    if (plan_ids === undefined) {
+      response.status(400).json({
+        error: 'Missing plan_ids.'
+      })
+      return
+    }
+
+    if (! Array.isArray(plan_ids)) {
+      response.status(400).json({
+        error: 'Incorrect type for plan_ids.'
+      })
+      return
+    }
+
+    if (plan_ids.length > 0) {
+      await Client.addKnownPlanByCookie(cookie, plan_ids)
+    }
+
+    response.status(200).json({
+      type: 'synchronize'
+    })
+
+  } catch (exception) {
+    console.log(exception)
+    next(exception)
+  }
+})
 
 
 // todo: move /getUpdate to client controller
@@ -38,28 +76,6 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
   }
 
 
-  const known_players = await Client.getKnownPlayersByCookie(cookie)
-  
-  // Request the client to send us all the player memories we don't have yet:
-  // todo: reuse the same code as for plans
-  const missing_players = await getMissingPlayerIds(known_players)
-  if (missing_players.length > 0) {
-    const already_requested_ids = await Pending.get(client_id, 'playermem')
-    const request_ids = missing_players.filter(id => !already_requested_ids.find((find_id) => { return find_id === id }))
-
-    if (request_ids.length > 0) {
-      console.log('Requesting players:', request_ids)
-
-      Pending.add(client_id, 'playermem', request_ids)
-
-      response.json({
-        type:       'sendPlayerMemories',
-        player_ids: request_ids
-      })
-      return
-    }
-  }
-
   // Send plans we have but client doesn't have yet:
   const plan = await Plan.getNextPlanToSend(known_ids)
   if (plan !== null) {
@@ -69,23 +85,12 @@ plansRouter.post('/getUpdate', async (request, response, next) => {
     response.json({
       type:      'plan',
       player_id: plan.player_id,
+      plan_name: plan.plan_name,
       plan:      plan.data
     })
     return
   }
 
-  // Send player memories we have but client doesn't have yet:
-  const mem = await PlayerMemory.getNextPlayerMemoryToSend(known_players)
-  if (mem !== null) {
-    console.log('Sending player memory', mem.player_id)
-    await Client.addKnownPlayerByCookie(cookie, mem.player_id)
-    response.json({
-      type:         'playerMemory',
-      playerMemory: mem.memory
-    })
-    return
-  }
-      
   
   response.status(200).json({
     type: 'success'
@@ -159,6 +164,7 @@ plansRouter.post('/', async (request, response, next) => {
     await Plan.create({
       player_id: request.body.player_id,
       plan_id:   request.body.data.plan_id,
+      plan_name: request.body.plan_name,
       data:      request.body.data
     })
 
@@ -174,24 +180,6 @@ plansRouter.post('/', async (request, response, next) => {
     next(exception)
   }
 })
-
-
-const getMissingPlayerIds = async (having_player_ids) => {
-  //console.log('getMissingPlayerIds(having_player_ids =', having_player_ids, ')')
-  const ids = await Plan.findAll({
-    attributes: [Sequelize.fn('DISTINCT', Sequelize.col('player_id')) ,'player_id'],
-    where: {
-      player_id: {
-        [Sequelize.Op.in]: having_player_ids
-      },
-      plan_name: null
-    }
-  }).map(plan => plan.player_id)
-  
-  return ids
-}
-
-
 
 
 module.exports = plansRouter
