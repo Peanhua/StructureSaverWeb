@@ -1,6 +1,7 @@
 # Timesheet
 
-Time used for the project, not including time used for the game mod portion.
+Time used for the project.
+Does not include the time used for the game mod portion.
 
 <table>
   <tr><th>Day</th><th>Hours</th><th>What was done</th></tr>
