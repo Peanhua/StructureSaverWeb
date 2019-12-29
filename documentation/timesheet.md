@@ -25,5 +25,8 @@ Time used for the project, not including time used for the game mod portion.
   <tr><td>28.12.</td><td>  1.25</td><td>Authentication/security.</td></tr>
   <tr><td>      </td><td>  1.00</td><td>Database setup system/tools.</td></tr>
   <tr><td>      </td><td>  1.00</td><td>Client listing and adding through frontend.</td></tr>
-  <tr><th>Total</th><th> 28.00</th><th></th></tr>
+  <tr><td>29.12.</td><td>  1.00</td><td>Plan details view in frontend.</td></tr>
+  <tr><td>      </td><td>  0.50</td><td>User account management in frontend.</td></tr>
+  <tr><td>      </td><td>  1.00</td><td>Get rid of player memories.</td></tr>
+  <tr><th>Total</th><th> 30.50</th><th></th></tr>
 </table>
