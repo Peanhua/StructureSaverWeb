@@ -36,6 +36,7 @@ loginRouter.post('/', async (request, response) => {
     id:       user.id,
     username: user.username,
     name:     user.name,
+    is_admin: user.is_admin,
     token
   }
 

@@ -27,6 +27,10 @@ const ButtonAddUser = (props) => {
   const [ isAdmin,  resetIsAdmin  ] = useField('checkbox')
 
   const newuserFormRef = React.createRef()
+
+  const user = props.user
+  if (!user.is_admin)
+    return (<div />)
   
   const onAddUser = async (event) => {
     event.preventDefault()
@@ -86,7 +90,11 @@ const ButtonAddUser = (props) => {
   )
 }
 
-const mapStateToProps = null
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  }
+}
 
 const mapDispatchToProps = {
   setNotification,
