@@ -1,9 +1,12 @@
-import React                    from 'react'
-import { connect }              from 'react-redux'
-import { useField }             from '../hooks'
-import { loginUser }            from '../reducers/loginReducer'
+import React         from 'react'
+import { connect }   from 'react-redux'
+import { useField }  from '../hooks'
+import {
+  loginUser
+} from '../reducers/loginReducer'
 import { setErrorNotification } from '../reducers/notificationReducer'
 import Logo                     from './Logo'
+import Spacer                   from './Spacer'
 
 const LoginForm = (props) => {
   const [ username ] = useField('text')
@@ -38,9 +41,26 @@ const LoginForm = (props) => {
   }
 
   return (
-    <div className="centered" style={containerStyle}>
+    <div className="centeredHigh" style={containerStyle}>
+      <Logo />
+      <Spacer />
+      <div style={centeredStyle}>
+        Sign in using a Steam account:
+      </div>
+      <div style={centeredStyle}>
+        <a href={props.steamAuthUrl}>
+          <img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_02.png" alt="Login using Steam" />
+        </a>
+      </div>
+      <Spacer />
+      <div style={centeredStyle}>
+        OR
+      </div>
+      <Spacer />
+      <div style={centeredStyle}>
+        Sign in using a local account:
+      </div>
       <form onSubmit={handleLogin}>
-        <Logo />
         <table>
           <tbody>
             <tr><td style={labelStyle}>User:</td><td><input style={inputStyle} {...username} /></td></tr>
@@ -54,11 +74,15 @@ const LoginForm = (props) => {
 }
 
 
-const mapStateToProps = null
+const mapStateToProps = (state) => {
+  return {
+    steamAuthUrl: state.user.steamAuthUrl
+  }
+}
 
 const mapDispatchToProps = {
   loginUser,
-  setErrorNotification
+  setErrorNotification,
 }
 
 const ConnectedLoginForm = connect(mapStateToProps, mapDispatchToProps)(LoginForm)

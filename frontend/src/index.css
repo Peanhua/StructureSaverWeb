@@ -48,6 +48,13 @@ button.big {
   padding-bottom: 2px;
 }
 
+/* Image button */
+button.image {
+  border:     none;
+  padding:    0;
+  background: none;
+}
+
 /* Layout stuff */
 div.container {
   padding: 10px;
@@ -62,13 +69,17 @@ span.spacer {
   width: 20px;
 }
 
-div.centered {
+div.centered, div.centeredHigh {
   position: absolute;
   top:      50%;
   left:     50%;
   -moz-transform:    translateX(-50%) translateY(-50%);
   -webkit-transform: translateX(-50%) translateY(-50%);
   transform:         translateX(-50%) translateY(-50%);
+}
+
+div.centeredHigh {
+  top: 25%;
 }
 
 /* Notification */

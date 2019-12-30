@@ -20,12 +20,36 @@ export const loadUser = () => {
   }
 }
 
+export const initializeSteamAuth = () => {
+  return async dispatch => {
+    const authUrl = await loginService.getSteamAuthUrl()
+    dispatch({
+      type:         'INITIALIZE_STEAM_AUTH',
+      steamAuthUrl: authUrl
+    })
+  }
+}
+
 export const loginUser = (username, password) => {
   return async dispatch => {
     const user = await loginService.login({
       username: username,
       password: password
     })
+    window.localStorage.setItem('loggedUser', JSON.stringify(user))
+    usersService.setToken(user.token)
+    plansService.setToken(user.token)
+    clientsService.setToken(user.token)
+    dispatch({
+      type: 'LOGIN_USER',
+      user: user
+    })
+  }
+}
+
+export const loginSteamUser = (steamAuthUrl) => {
+  return async dispatch => {
+    const user = await loginService.steamLogin(steamAuthUrl)
     window.localStorage.setItem('loggedUser', JSON.stringify(user))
     usersService.setToken(user.token)
     plansService.setToken(user.token)
@@ -50,20 +74,38 @@ export const logoutUser = () => {
 }
 
 /* The reducer: */
-const initialState = null
+const initialState = {
+  user:         null,
+  steamAuthUrl: null
+}
 
 const reducer = (state = initialState, action) => {
-  switch(action.type) {
+  switch(action.type)
+  {
+    case 'INITIALIZE_STEAM_AUTH': {
+      return {
+        user:         state.user,
+        steamAuthUrl: action.steamAuthUrl
+      }
+    }
+    
     case 'LOGIN_USER': {
-      return action.user
+      return {
+        user:         action.user,
+        steamAuthUrl: state.authUrl
+      }
     }
 
     case 'LOGOUT_USER': {
-      return null
+      return {
+        user:         null,
+        steamAuthUrl: state.authUrl
+      }
     }
-
-    default:
+    
+    default: {
       return state
+    }
   }
 }
 

@@ -14,10 +14,15 @@ import Clients                from './components/Clients'
 import ClientInformation      from './components/ClientInformation'
 import Logo                   from './components/Logo'
 import Navigation             from './components/Navigation'
+import SteamLogin             from './components/SteamLogin'
 import { initializeUsers }    from './reducers/usersReducer'
 import { initializePlans }    from './reducers/plansReducer'
 import { initializeClients }  from './reducers/clientsReducer'
-import { loadUser }           from './reducers/loginReducer'
+import {
+  loadUser,
+  initializeSteamAuth
+} from './reducers/loginReducer'
+
 
 const App = (props) => {
   useEffect(() => {
@@ -25,52 +30,61 @@ const App = (props) => {
     props.initializeUsers()
     props.initializePlans()
     props.initializeClients()
+    props.initializeSteamAuth()
   }, // eslint-disable-next-line react-hooks/exhaustive-deps
    []
   )
-  
+
   const user = props.user
 
-  const content = () => (
-    <div>
-      <Logo />
-      <Navigation />
-      <Route exact path="/plans" render={() => <Plans />} />
-      <Route exact path="/plans/:id"
-        render={({ match }) => 
-          <PlanInformation id={match.params.id} />
-        }
-      />
-      <Route exact path="/users" render={() => <Users />} />
-      <Route exact path="/users/:id"
-        render={({ match }) => 
-          <UserInformation id={match.params.id} />
-        }
-      />
-      <Route exact path="/clients" render={() => <Clients />} />
-      <Route exact path="/clients/:id"
-        render={({ match }) => 
-          <ClientInformation id={match.params.id} />
-        }
-      />
-    </div>
-  )
+  if (user === null)
+    return (
+      <BrowserRouter>
+        <Route exact path="/steamLogin" component={SteamLogin} />
+        <div>
+          <Notification />
+          <LoginForm />
+        </div>
+      </BrowserRouter>
+    )
   
-  return (
-    <BrowserRouter>
-      <div>
-        <Notification />
-        {user === null && <LoginForm />}
-        {user !== null && content()}
-      </div>
-    </BrowserRouter>
-  )
+  else
+    
+    return (
+      <BrowserRouter>
+        <div>
+          <Notification />
+          <div>
+            <Logo />
+            <Navigation />
+            <Route exact path="/plans" render={() => <Plans />} />
+            <Route exact path="/plans/:id"
+                   render={({ match }) => 
+                           <PlanInformation id={match.params.id} />
+                          }
+            />
+            <Route exact path="/users" render={() => <Users />} />
+            <Route exact path="/users/:id"
+                   render={({ match }) => 
+                           <UserInformation id={match.params.id} />
+                          }
+            />
+            <Route exact path="/clients" render={() => <Clients />} />
+            <Route exact path="/clients/:id"
+                   render={({ match }) => 
+                           <ClientInformation id={match.params.id} />
+                          }
+            />
+          </div>
+        </div>
+      </BrowserRouter>
+    )
 }
 
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user.user
   }
 }
 
@@ -79,6 +93,7 @@ const mapDispatchToProps = {
   initializePlans,
   initializeClients,
   loadUser,
+  initializeSteamAuth
 }
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
