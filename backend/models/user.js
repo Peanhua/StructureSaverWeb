@@ -22,6 +22,10 @@ const User = db.sequelize.define('account', {
     type:         Sequelize.BOOLEAN,
     allowNull:    false,
     defaultValue: false
+  },
+  steam_id: {
+    type:         Sequelize.STRING,
+    allowNull:    true
   }
 }, {
 })

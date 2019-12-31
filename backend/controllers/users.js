@@ -39,11 +39,17 @@ usersRouter.post('/', async (request, response, next) => {
       return
     }
 
-    const savedUser = await User.create({
+    const newuser = {
       username:      body.username,
       name:          body.name,
       password_hash: await User.passwordToHash(body.password)
-    })
+    }
+
+    if (body.steam_id.length > 0) {
+      newuser.steam_id = body.steam_id
+    }
+
+    const savedUser = await User.create(newuser)
     
     response.json(savedUser)
 

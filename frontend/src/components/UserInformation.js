@@ -13,6 +13,7 @@ const UserInformation = (props) => {
   return (
     <div className="detailContainer">
       <div className="header">{user.name}</div>
+      <div className="line">Steam id: {user.steam_id}</div>
       <div className="line">Is admin? {user.is_admin ? 'Yes' : 'No'}</div>
       <Spacer />
       <div className="line">Database id: {user.id}</div>

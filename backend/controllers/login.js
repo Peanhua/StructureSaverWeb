@@ -40,7 +40,7 @@ loginRouter.get('/steamAuthUrl', async (request, response) => {
 })
 
 loginRouter.get('/steamAuthenticate', async (request, response) => {
-  relyingParty.verifyAssertion(request, (error, result) => {
+  relyingParty.verifyAssertion(request, async (error, result) => {
     if (error) {
       response.status(400).json({
         error: error.message
@@ -55,29 +55,37 @@ loginRouter.get('/steamAuthenticate', async (request, response) => {
       return
     }
 
-    const steamIdStart = 'https://steamcommunity.com/openid/id/'
-    const steamId = result.claimedIdentifier.substring(steamIdStart.length)
+    const steam_id_start = 'https://steamcommunity.com/openid/id/'
+    const steam_id = result.claimedIdentifier.substring(steam_id_start.length)
 
-    console.log("Steam ID =", steamId)
-    const userForToken = {
-      username: 'kek',
-      id:       42,
-      is_admin: false
+
+    const existingUser = await User.findOne({
+      where: {
+        steam_id: steam_id
+      }
+    })
+
+    if (existingUser !== null) {
+      loginUser(existingUser, response)
+      return
     }
 
-    const token = jwt.sign(userForToken, config.JWTSECRET)
-    
-    const retuser = {
-      id:       42,
-      username: 'kek',
-      name:     'kekkonen',
-      is_admin: false,
-      token
+    if (!config.AUTOCREATE_STEAM_USERS) {
+      response.status(400).json({
+        error: 'Authentication failed (no such user).'
+      })
+      return
     }
 
-    response
-      .status(200)
-      .send(retuser)
+    const newuser = {
+      username:      steam_id,
+      name:          steam_id,
+      password_hash: 'not going to work',
+      steam_id:      steam_id
+    }
+
+    const savedUser = await User.create(newuser)
+    loginUser(savedUser, response)
   })
 })
 
@@ -95,11 +103,17 @@ loginRouter.post('/', async (request, response) => {
                   : await bcrypt.compare(body.password, user.password_hash)
 
   if (!(user && passwordCorrect)) {
-    return response.status(401).json({
+    response.status(401).json({
       error: 'invalid username or password'
     })
+    return
   }
 
+  loginUser(user, response)
+})
+
+
+const loginUser = (user, response) => {
   const userForToken = {
     username: user.username,
     id:       user.id,
@@ -116,9 +130,9 @@ loginRouter.post('/', async (request, response) => {
     token
   }
 
-  return response
+  response
     .status(200)
     .send(retuser)
-})
+}  
 
 module.exports = loginRouter

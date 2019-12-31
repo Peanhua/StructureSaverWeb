@@ -185,25 +185,40 @@ table.list tr.even {
 }
 
 
-/* Detail container (user) */
-div.detailContainer {
+/* Detail and togglable containers */
+div.detailContainer, div.togglableContainer {
   margin:           10px;
   padding-left:     0;
-  border:           solid;
-  border-width:     1px;
   margin-bottom:    5px;
   background-color: #ffebcc;
+}
+
+div.detailContainer {
+  border:           solid;
+  border-width:     1px;
   border-color:     #808080;
   border-radius:    3px;
 }
 
-div.detailContainer div.header {
+div.detailContainer div.header, div.togglableContainer div.header {
   padding-top:      4px;
   padding-bottom:   4px;
   padding-left:     4px;
   background-color: #f5e1c4;
+  font-weight:      bold;
 }
 
-div.detailContainer div.line {
+div.detailContainer div.line, div.togglableContainer div.line {
   padding-left: 8px;
 }
+
+/* Some fixed width spans for aligned layout building */
+span.w1, label.w1 {
+  width: 100px;
+  display: inline-block;
+}
+span.w2, label.w2 {
+  width: 200px;
+  display: inline-block;
+}
+

@@ -8,6 +8,7 @@ const User = (props) => {
   return (
     <tr className={cn}>
       <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
+      <td>{user.steam_id}</td>
       <td>{user.is_admin ? 'Yes' : 'No'}</td>
       <td>{user.createdAt}</td>
       <td>{user.updatedAt}</td>

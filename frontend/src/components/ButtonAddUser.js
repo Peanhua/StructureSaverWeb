@@ -25,6 +25,7 @@ const ButtonAddUser = (props) => {
   const [ password, resetPassword ] = useField('password')
   const [ name,     resetName     ] = useField('name')
   const [ isAdmin,  resetIsAdmin  ] = useField('checkbox')
+  const [ steamId,  resetSteamId  ] = useField('steamId')
 
   const newuserFormRef = React.createRef()
 
@@ -52,6 +53,7 @@ const ButtonAddUser = (props) => {
       username: username.value,
       password: password.value,
       name:     name.value,
+      steam_id: steamId.value,
       is_admin: false
     }
 
@@ -65,25 +67,38 @@ const ButtonAddUser = (props) => {
       resetPassword()
       resetName()
       resetIsAdmin()
+      resetSteamId()
 
     } catch (exception) {
       console.log(exception)
       props.setErrorNotification('Something went wrong: ' + exception, 5)
     }
   }
-  
+
   return (
     <Togglable showButtonLabel='Add new user' hideButtonLabel='Cancel' ref={newuserFormRef}>
       <form onSubmit={onAddUser} id="newuserForm">
-        <div>Add new user:</div>
-        <label htmlFor="newuser_username">Username:</label>
-        <input id="newuser_username" {...username} />
-        <label htmlFor="newuser_password">Password:</label>
-        <input type="password" id="newuser_password" {...password} />
-        <label htmlFor="newuser_name">Name:</label>
-        <input id="newuser_name" {...name} />
+        <div className="header">Add new user:</div>
+        <div className="line">
+          <label className="w1" htmlFor="newuser_username">Username:</label>
+          <input id="newuser_username" {...username} />
+        </div>
+        <div className="line">
+          <label className="w1" htmlFor="newuser_password">Password:</label>
+          <input type="password" id="newuser_password" {...password} />
+        </div>
+        <div className="line">
+          <label className="w1" htmlFor="newuser_name">Name:</label>
+          <input type="text" id="newuser_name" {...name} />
+        </div>
+        <div className="line">
+          <label className="w1" htmlFor="newuser_name">Steam id:</label>
+          <input className="field" type="text" id="steamId" {...steamId} />
+        </div>
         <span className="spacer" />
-        <button form="newuserForm" type="submit">Add</button>
+        <div className="line">
+          <button form="newuserForm" type="submit">Add</button>
+        </div>
       </form>
     </Togglable>
   )
@@ -91,7 +106,7 @@ const ButtonAddUser = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user.user
   }
 }
 

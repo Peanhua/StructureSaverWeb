@@ -14,6 +14,7 @@ const Users = (props) => {
         <thead>
           <tr className="header">
             <th>User</th>
+            <th>Steam id</th>
             <th>Is admin</th>
             <th>Created</th>
             <th>Last updated</th>
