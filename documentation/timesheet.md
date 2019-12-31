@@ -29,5 +29,8 @@ Does not include the time used for the game mod portion.
   <tr><td>29.12.</td><td>  1.00</td><td>Plan details view in frontend.</td></tr>
   <tr><td>      </td><td>  0.50</td><td>User account management in frontend.</td></tr>
   <tr><td>      </td><td>  1.00</td><td>Get rid of player memories.</td></tr>
-  <tr><th>Total</th><th> 30.50</th><th></th></tr>
+  <tr><td>30.12.</td><td> 10.00</td><td>Authentication using Steam.</td></tr>
+  <tr><td>31.12.</td><td>  1.00</td><td>Authentication using Steam.</td></tr>
+  <tr><td>      </td><td>  0.50</td><td>Bug fixing and miscellaneous stuff.</td></tr>
+  <tr><th>Total</th><th> 42.00</th><th></th></tr>
 </table>
