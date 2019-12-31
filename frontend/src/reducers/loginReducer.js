@@ -92,14 +92,14 @@ const reducer = (state = initialState, action) => {
     case 'LOGIN_USER': {
       return {
         user:         action.user,
-        steamAuthUrl: state.authUrl
+        steamAuthUrl: state.steamAuthUrl
       }
     }
 
     case 'LOGOUT_USER': {
       return {
         user:         null,
-        steamAuthUrl: state.authUrl
+        steamAuthUrl: state.steamAuthUrl
       }
     }
     

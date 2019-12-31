@@ -27,12 +27,17 @@ import {
 const App = (props) => {
   useEffect(() => {
     props.loadUser()
-    props.initializeUsers()
-    props.initializePlans()
-    props.initializeClients()
     props.initializeSteamAuth()
   }, // eslint-disable-next-line react-hooks/exhaustive-deps
    []
+  )
+
+  useEffect(() => {
+    props.initializeUsers()
+    props.initializePlans()
+    props.initializeClients()
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+   [props.user]
   )
 
   const user = props.user
