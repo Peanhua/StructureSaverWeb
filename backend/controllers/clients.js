@@ -28,6 +28,22 @@ clientsRouter.post('/', async (request, response, next) => {
       return
     }
 
+    const version = body.version
+    if (version === undefined) {
+      response.status(400).json({
+        error: 'Missing version.'
+      })
+      return
+    }
+
+    const required_version = 1
+    if (parseInt(version) !== required_version) {
+      response.status(400).json({
+        error: 'Incorrect version "' + version + '", backend requires version ' + required_version
+      })
+      return
+    }
+
     const saved = await Client.createNewClient(client_id, password)
     response.json(saved)
     
