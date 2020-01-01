@@ -71,7 +71,10 @@ Pending.remove = async (client_id, type, id) => {
 Pending.clear = async (client_id) => {
   return Pending.destroy({
     where: {
-      client_id: client_id
+      client_id: client_id,
+      request_type: {
+        [Sequelize.Op.notIn]: ['plan_name', 'plan_usertext']
+      }
     }
   })
 }
