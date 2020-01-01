@@ -28,22 +28,6 @@ clientsRouter.post('/', async (request, response, next) => {
       return
     }
 
-    const version = body.version
-    if (version === undefined) {
-      response.status(400).json({
-        error: 'Missing version.'
-      })
-      return
-    }
-
-    const required_version = 1
-    if (parseInt(version) !== required_version) {
-      response.status(400).json({
-        error: 'Incorrect version "' + version + '", backend requires version ' + required_version
-      })
-      return
-    }
-
     const saved = await Client.createNewClient(client_id, password)
     response.json(saved)
     
@@ -109,35 +93,54 @@ clientsRouter.post('/login', async (request, response, next) => {
 
     const client_id = body.client_id
     if (client_id === undefined) {
-      return response.status(400).json({
+      response.status(400).json({
         error: 'Missing client_id.'
       })
+      return
     }
 
     const password = body.password
     if (password === undefined) {
-      return response.status(400).json({
+      response.status(400).json({
         error: 'Missing password.'
       })
+      return
     }
 
+    const version = body.version
+    if (version === undefined) {
+      response.status(400).json({
+        error: 'Missing version.'
+      })
+      return
+    }
+
+    const required_version = 1
+    if (parseInt(version) !== required_version) {
+      response.status(400).json({
+        error: 'Incorrect version "' + version + '", backend requires version ' + required_version
+      })
+      return
+    }
+    
     const cookie = await Client.authenticate(client_id, password)
     if (cookie === null) {
-      return response.status(400).json({
+      response.status(400).json({
         error: 'Unknown client_id or wrong password.'
       })
+      return
     }
 
     Pending.clear(client_id)
     Client.setKnownPlansByCookie(cookie, [])
 
-    return response.status(200).json({
+    response.status(200).json({
       type:   'clientLogin',
       cookie: cookie
     })
 
   } catch(exception) {
-    return next(exception)
+    next(exception)
   }
 })
 
@@ -181,7 +184,6 @@ clientsRouter.post('/synchronize', async (request, response, next) => {
 })
 
 
-// todo: move /getUpdate to client controller
 clientsRouter.post('/getUpdate', async (request, response, next) => {
   console.log('clientsRouter.getUpdate()')
 
@@ -227,12 +229,44 @@ clientsRouter.post('/getUpdate', async (request, response, next) => {
     return
   }
 
+
+  if (await returnPlanNameUpdate(client_id, response))
+    return
+
   
   response.status(200).json({
     type: 'success'
   })
 })
 
+// Return plan name update:
+const returnPlanNameUpdate = async (client_id, response) => {
+  const plan_ids = await Pending.get(client_id, 'plan_name') // todo: add a getOne() method
+  if (plan_ids.length === 0)
+    return false
+  
+  const plan_id = plan_ids[0]
+  
+  Pending.remove(client_id, 'plan_name', plan_id)
+  
+  const plan = await Plan.findOne({
+    where: {
+      plan_id: plan_id
+    }
+  })
+  
+  if (plan === null)
+    return false
+  
+  response.json({
+    type:      'planField',
+    player_id: plan.player_id,
+    plan_id:   plan.plan_id,
+    field:     'name',
+    value:     plan.plan_name
+  })
+  return true
+}
 
 
 

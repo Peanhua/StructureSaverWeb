@@ -90,4 +90,87 @@ plansRouter.post('/', async (request, response, next) => {
 })
 
 
+plansRouter.post('/updateField', async (request, response, next) => {
+  try {
+    const body = request.body
+
+    const [ cookie, client_id ] = await auth.checkClient(request, response)
+    if (cookie === null)
+      return
+
+    const plan_id = body.plan_id
+    if (plan_id === undefined) {
+      response.status(400).json({
+        error: 'Missing plan_id.'
+      })
+      return
+    }
+    
+    const field = body.field
+    if (field === undefined) {
+      response.status(400).json({
+        error: 'Missing field.'
+      })
+      return
+    }
+
+    const value = body.value
+    if (value === undefined) {
+      response.status(400).json({
+        error: 'Missing value.'
+      })
+      return
+    }
+
+    console.log(`Update plan field "${field}" to "${value}" where plan_id="${plan_id}".`)
+    const plan = await Plan.findOne({
+      where: {
+        plan_id: plan_id
+      }
+    })
+    if (plan === null) {
+      response.status(400).json({
+        error: 'Unknown plan.'
+      })
+      return
+    }
+
+    if (field === 'name') {
+      plan.plan_name = value
+      plan.save()
+      
+    } else if (field === 'usertext') {
+      plan.data.usertext = value
+      plan.save()
+      
+    } else {
+      response.status(400).json({
+        error: 'Unknown field: ' + field
+      })
+      return
+    }
+
+    
+    const clients = await Client.findAll({
+      attributes: ['client_id'],
+      where: {
+        client_id: {
+          [Sequelize.Op.ne]: client_id
+        }
+      }
+    })
+    
+    clients.forEach((client) => {
+      Pending.add(client.client_id, 'plan_' + field, plan_id)
+    })
+
+    response.status(200)
+    
+  } catch (exception) {
+    console.log(exception)
+    next(exception)
+  }
+})
+
+
 module.exports = plansRouter

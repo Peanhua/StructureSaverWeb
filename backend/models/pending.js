@@ -39,13 +39,22 @@ Pending.get = async (client_id, type) => {
 
 Pending.add = async (client_id, type, ids) => {
   //console.log('Pending.add(client_id =', client_id, ', type =', type, ', ids =', ids, ')')
-  ids.forEach((id) => {
+  if (Array.isArray(ids)) {
+    ids.forEach((id) => {
+      Pending.create({
+        client_id:       client_id,
+        request_type:    type,
+        request_type_id: id
+      })
+    })
+    
+  } else {
     Pending.create({
       client_id:       client_id,
       request_type:    type,
-      request_type_id: id
+      request_type_id: ids
     })
-  })
+  }    
 }
 
 Pending.remove = async (client_id, type, id) => {
