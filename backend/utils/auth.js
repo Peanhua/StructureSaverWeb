@@ -8,7 +8,7 @@ const checkClient = async (request, response) => {
     response.status(400).json({
       error: 'Missing cookie.'
     })
-    return null
+    return [ null, null ]
   }
 
   const client_id = await Client.checkCookie(cookie)
@@ -16,7 +16,7 @@ const checkClient = async (request, response) => {
     response.status(400).json({
       error: 'Not logged in.'
     })
-    return null
+    return [ null, null ]
   }
 
   return [
