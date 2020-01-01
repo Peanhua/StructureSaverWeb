@@ -12,7 +12,7 @@ Issues if a player has plans on more than one server:
 
 The plan id generation is now better as of v2.7 of the mod: The current UTC timestamp with 1 second resolution is used in the plan id, making it impossible for player to generate two plans with same id.
 
-The first time synchronization between the game servers (Clients) and the Backend may take a long time depending on how many plans you have. With default settings it is approximately 10 seconds for each plan, including deleted plans (they were only marked as being "deleted" and never really deleted).
+The first time synchronization between the game servers (Clients) and the Backend may take a long time depending on how many plans you have. With default settings it is approximately 10 seconds for each plan.
 
 
 ## Database
@@ -42,11 +42,13 @@ VARIABLE2=Value2
 
 Below are listed all the variables:
 <table>
-  <tr><th>Variable</th><th>Type</th>   <th>Default value</th><th>Description</th></tr>
-  <tr><td>PORT</td>    <td>Integer</td><td>3001</td>         <td>The IP port the Backend listens to.</td></tr>
-  <tr><td>PROTOCOL</td><td>String</td> <td>"http"</td>       <td>Either "http" or "https". Note that HTTPS require valid certificate, self-signed will not work.</td></tr>
-  <tr><td>CERT</td>    <td>String</td> <td>"cert.pem"</td>   <td>The filename of the certificate used for HTTPS.</td>
-  <tr><td>CERT_KEY</td><td>String</td> <td>"key.pem"</td>    <td>The filename of the certificate key used for HTTPS.</td>
+  <tr><th>Variable</th> <th>Type</th>   <th>Default value</th><th>Description</th></tr>
+  <tr><td>PORT</td>     <td>Integer</td><td>3001</td>         <td>The IP port the Backend listens to.</td></tr>
+  <tr><td>PROTOCOL</td> <td>String</td> <td>"http"</td>       <td>Either "http" or "https". Note that HTTPS require valid certificate, self-signed will not work.</td></tr>
+  <tr><td>CERT</td>     <td>String</td> <td>"cert.pem"</td>   <td>The filename of the certificate used for HTTPS.</td></tr>
+  <tr><td>CERT_KEY</td> <td>String</td> <td>"key.pem"</td>    <td>The filename of the certificate key used for HTTPS.</td></tr>
+  <tr><td>JWTSECRET</td><td>String</td> <td>"abc"</td>        <td>The secret used for creating JWTs, change to something random.</td></tr>
+  <tr><td>AUTOCREATE_STEAM_USERS</td><td>Boolean</td><td>false</td><td>If set to true, everyone with a valid Steam account can login. A new user account is created automatically for new users.</td></tr>
 </table>
 
 Example ".env" file:
@@ -69,9 +71,22 @@ $ npm install
 In the respective directory (backend and frontend).
 
 
+## Initializing the database
+
+See the "backend/bin/initialize_db.sh" script for example how to initialize the database.
+The bin -directory in the backend contains also couple other useful tools for managing the database.
+
+
 ## Starting the Backend
 
 Use the following npm command to start the Backend normally:
+```
+$ npm start
+```
+
+## Starting the Frontend
+
+Configure the proper host and port for the backend in the package.json by setting the proxy, then start the frontend with npm:
 ```
 $ npm start
 ```
@@ -87,7 +102,7 @@ BackendClientId="id"
 BackendClientPassword="password"
 ```
 
-Each Client must have unique `BackendClientId`. The ClientIds would normally be created in the Frontend, but the Frontend is currently not ready, so the supplied test script `bin/post.js` can be used to generate them as well. For each Client, edit the `backend/test_requests/clientCreate.json` file, setting the "client_id" and "password" fields appropriately, then execute it:
+Each Client must have unique `BackendClientId`.
 ```
 $ ./bin/post.js backend/test_requests/clientCreate.json
 ```
