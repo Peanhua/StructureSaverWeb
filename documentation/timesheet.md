@@ -32,5 +32,7 @@ Does not include the time used for the game mod portion.
   <tr><td>30.12.</td><td> 10.00</td><td>Authentication using Steam.</td></tr>
   <tr><td>31.12.</td><td>  1.00</td><td>Authentication using Steam.</td></tr>
   <tr><td>      </td><td>  0.50</td><td>Bug fixing and miscellaneous stuff.</td></tr>
-  <tr><th>Total</th><th> 42.00</th><th></th></tr>
+  <tr><td>  1.1.</td><td>  4.00</td><td>Plan name and usertext changing functionality.</td></tr>
+  <tr><td>      </td><td>  1.00</td><td>Bug fixing and miscellaneous stuff.</td></tr>
+  <tr><th>Total</th><th> 47.00</th><th></th></tr>
 </table>
