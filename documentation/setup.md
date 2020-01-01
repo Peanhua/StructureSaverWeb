@@ -101,9 +101,3 @@ Backend="http://localhost:3001"
 BackendClientId="id"
 BackendClientPassword="password"
 ```
-
-Each Client must have unique `BackendClientId`.
-```
-$ ./bin/post.js backend/test_requests/clientCreate.json
-```
-Note that the Backend must be running, and you probably need to edit the `bin/post.js` script, adjust the `hostname` and `port` options to point to your Backend.
