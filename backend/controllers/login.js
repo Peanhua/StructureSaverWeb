@@ -117,7 +117,8 @@ const loginUser = (user, response) => {
   const userForToken = {
     username: user.username,
     id:       user.id,
-    is_admin: user.is_admin
+    is_admin: user.is_admin,
+    steam_id: user.steam_id
   }
 
   const token = jwt.sign(userForToken, config.JWTSECRET)
@@ -127,7 +128,8 @@ const loginUser = (user, response) => {
     username: user.username,
     name:     user.name,
     is_admin: user.is_admin,
-    token
+    steam_id: user.steam_id,
+    token:    token
   }
 
   response

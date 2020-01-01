@@ -11,8 +11,19 @@ plansRouter.get('/', async (request, response, next) => {
     const user = auth.checkFrontend(request, response, false)
     if (user === null)
       return
-    
-    const plans = await Plan.findAll()
+
+    let plans = []
+
+    if (user.is_admin) {
+      plans = await Plan.findAll()
+
+    } else {
+      plans = await Plan.findAll({
+        where: {
+          player_id: user.steam_id
+        }
+      })
+    }
 
     const jsonPlans = plans.map((plan) => {
       return {
@@ -34,11 +45,28 @@ plansRouter.get('/', async (request, response, next) => {
 
 plansRouter.get('/:id', async (request, response, next) => {
   try {
-    const plan = await Plan.findOne({
-      where: {
-        id: request.params.id
-      }
-    })
+    const user = auth.checkFrontend(request, response, false)
+    if (user === null)
+      return
+
+    let plan = {}
+
+    if (user.is_admin) {
+      plan = await Plan.findOne({
+        where: {
+          id: request.params.id
+        }
+      })
+
+    } else {
+      plan = await Plan.findOne({
+        where: {
+          id:        request.params.id,
+          player_id: user.steam_id
+        }
+      })
+    }
+    
     const jsonPlan = {
       id:        plan.id,
       plan_id:   plan.plan_id,
@@ -50,7 +78,7 @@ plansRouter.get('/:id', async (request, response, next) => {
       pieces:    plan.data.pieces
     }
 
-    return response.json(jsonPlan)
+    response.json(jsonPlan)
     
   } catch (exception) {
     next(exception)

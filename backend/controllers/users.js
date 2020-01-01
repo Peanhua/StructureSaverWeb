@@ -94,6 +94,11 @@ usersRouter.get('/', async (request, response, next) => {
     const user = auth.checkFrontend(request, response, false)
     if (user === null)
       return
+
+    if (user.is_admin === false) {
+      response.json([])
+      return
+    }
     
     const users = await User.findAll()
 

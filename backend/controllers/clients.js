@@ -68,6 +68,11 @@ clientsRouter.get('/', async (request, response, next) => {
     if (user === null)
       return
 
+    if (user.is_admin === false) {
+      response.json([])
+      return
+    }
+
     const clients = await Client.findAll()
 
     const jsonClients = clients.map((client) => {
