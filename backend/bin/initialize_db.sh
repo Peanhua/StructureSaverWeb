@@ -16,3 +16,4 @@ createdb ${DATABASE_NAME} || exit 1
 
 ./bin/createUser.js root Administrator aaa true
 ./bin/createClient.js kissa koira
+./bin/createClient.js lehma hevonen
