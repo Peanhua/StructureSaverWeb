@@ -164,11 +164,36 @@ plansRouter.post('/updateField', async (request, response, next) => {
     }
 
     if (field === 'name') {
+      if (typeof(value) !== 'string') {
+        response.status(400).json({
+          error: 'Incorrect value type, expected string, got ' + typeof(value)
+        })
+        return
+      }
       plan.plan_name = value
       plan.save()
       
     } else if (field === 'usertext') {
+      if (typeof(value) !== 'string') {
+        response.status(400).json({
+          error: 'Incorrect value type, expected string, got ' + typeof(value)
+        })
+        return
+      }
       plan.data.usertext = value
+      plan.save()
+
+    } else if (field === 'modlist') {
+      if (!Array.isArray(value)) {
+        response.status(400).json({
+          error: 'Incorrect value type, expected array, got ' + typeof(value)
+        })
+        return
+      }
+      //plan.data.mods = value // For some reason doing it this way does not get the plan saved, maybe dirty bit is not set on plan with this?
+      const newdata = plan.data
+      newdata.mods = value
+      plan.data = newdata
       plan.save()
       
     } else {
