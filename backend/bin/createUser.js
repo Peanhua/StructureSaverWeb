@@ -22,7 +22,7 @@ const is_admin = process.argv[5]
 const main = async () => {
   await db.initialize()
 
-  const password_hash = await User.passwordToHash('aaa')
+  const password_hash = await User.passwordToHash(password)
 
   const saved = await User.create({
     username:      username,
