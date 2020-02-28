@@ -175,15 +175,15 @@ Client.addKnownPlanByCookie = async (cookie, plan_id) => {
   const client_id = res.client_id
 
   if (Array.isArray(plan_id)) {
-    plan_id.forEach((id) => {
-      ClientKnownPlanId.create({
+    await plan_id.forEach(async (id) => {
+      await ClientKnownPlanId.create({
         client_id: client_id,
         plan_id:   id
       })
     })
     
   } else {
-    ClientKnownPlanId.create({
+    await ClientKnownPlanId.create({
       client_id: client_id,
       plan_id:   plan_id
     })
