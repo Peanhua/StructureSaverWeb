@@ -1,4 +1,5 @@
 #!/bin/sh
+# This is an example how to initialize the database, assumes PostgreSQL.
 
 if [ ! -f ./.env ]; then
     echo "${0}: Missing required file \".env\"."
