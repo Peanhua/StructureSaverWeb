@@ -55,7 +55,7 @@ const ButtonDeleteUser = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
+    user: state.user.user,
     users: state.users
   }
 }

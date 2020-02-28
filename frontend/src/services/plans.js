@@ -23,8 +23,17 @@ const get = async (id) => {
   return response.data
 }
 
+const deletePlan = async (id) => {
+  const config = {
+    headers: { Authorization: token }
+  }
+  const response = await axios.delete(baseUrl + '/' + id, config)
+  return response.data
+}
+
 export default {
   getAll,
   get,
+  deletePlan,
   setToken
 }

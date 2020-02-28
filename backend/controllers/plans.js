@@ -1,9 +1,10 @@
-const Sequelize    = require('sequelize')
-const plansRouter  = require('express').Router()
-const Plan         = require('../models/plan')
-const Client       = require('../models/client')
-const Pending      = require('../models/pending')
-const auth         = require('../utils/auth')
+const Sequelize         = require('sequelize')
+const plansRouter       = require('express').Router()
+const Plan              = require('../models/plan')
+const Client            = require('../models/client')
+const ClientKnownPlanId = require('../models/clientKnownPlanId')
+const Pending           = require('../models/pending')
+const auth              = require('../utils/auth')
 
 
 plansRouter.get('/', async (request, response, next) => {
@@ -113,6 +114,107 @@ plansRouter.post('/', async (request, response, next) => {
     
   } catch (exception) {
     console.log(exception)
+    next(exception)
+  }
+})
+
+// The client version:
+plansRouter.post('/delete', async (request, response, next) => {
+  try {
+    const [ cookie, client_id ] = await auth.checkClient(request, response)
+    if (cookie === null)
+      return
+
+    const plan_id = request.body.plan_id
+    console.log('Delete plan, plan_id =', plan_id)
+
+    const deleteplan = await Plan.findOne({
+      where: {
+        plan_id: plan_id
+      }
+    })
+    if (deleteplan === null) {
+      response.status(404).json({ error: 'Plan not found error' })
+      return
+    }
+
+    await deleteplan.destroy()
+
+    ClientKnownPlanId.destroy({
+      where: {
+        plan_id: plan_id
+      }
+    })
+    
+
+    const clients = await Client.findAll({
+      attributes: ['client_id'],
+      where: {
+        client_id: {
+          [Sequelize.Op.ne]: client_id
+        }
+      }
+    })
+
+    clients.forEach((client) => {
+      Pending.add(client.client_id, 'planDelete', plan_id)
+    })
+
+    response.status(204).json({ }).end()
+    
+  } catch (exception) {
+    console.log(exception)
+    next(exception)
+  }
+})
+
+// The frontend version:
+plansRouter.delete('/:id', async (request, response, next) => {
+  try {
+    const user = auth.checkFrontend(request, response, false)
+    if (user === null)
+      return
+
+    const id = request.params.id
+
+    const deleteplan = await Plan.findOne({
+      where: {
+        id: id
+      }
+    })
+    if (deleteplan === null) {
+      response.status(404).json({ error: 'Plan not found error' })
+      return
+    }
+
+    const plan_id = deleteplan.plan_id
+    
+    if (!user.is_admin && user.steam_id !== deleteplan.player_id) {
+      response.status(404).json({ error: 'Plan not found error' })
+      return
+    }
+
+    await deleteplan.destroy()
+
+    ClientKnownPlanId.destroy({
+      where: {
+        plan_id: plan_id
+      }
+    })
+
+
+    const clients = await Client.findAll({
+      attributes: ['client_id']
+    })
+
+    clients.forEach((client) => {
+      Pending.add(client.client_id, 'planDelete', plan_id)
+    })
+    
+    
+    response.status(204).end()
+    
+  } catch (exception) {
     next(exception)
   }
 })

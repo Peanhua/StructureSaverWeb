@@ -21,6 +21,16 @@ export const getPlan = (id) => {
   }
 }
 
+export const deletePlan = (id) => {
+  return async dispatch => {
+    await plansService.deletePlan(id)
+    dispatch({
+      type: 'PLAN_DELETE',
+      plan_id: id
+    })
+  }
+}
+
 
 /* The reducer: */
 const initialState = []
@@ -39,6 +49,9 @@ const reducer = (state = initialState, action) => {
           return plan
       })
       return ns
+    }
+    case 'PLAN_DELETE': {
+      return state.filter(plan => plan.id !== action.plan_id)
     }
     default: {
       return state

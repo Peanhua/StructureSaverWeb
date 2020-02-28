@@ -238,6 +238,9 @@ clientsRouter.post('/getUpdate', async (request, response, next) => {
   if (await returnPlanNameUpdate(client_id, response))
     return
 
+  if (await returnPlanDelete(client_id, response))
+    return
+
   
   response.status(200).json({
     type: 'success'
@@ -270,6 +273,23 @@ const returnPlanNameUpdate = async (client_id, response) => {
     field:     'name',
     value:     plan.plan_name
   })
+  return true
+}
+
+const returnPlanDelete = async (client_id, response) => {
+  const plan_ids = await Pending.get(client_id, 'planDelete')
+  if (plan_ids.length === 0)
+    return false
+
+  const plan_id = plan_ids[0]
+
+  Pending.remove(client_id, 'planDelete', plan_id)
+
+  response.json({
+    type:   'planDelete',
+    plan_id: plan_id
+  })
+
   return true
 }
 

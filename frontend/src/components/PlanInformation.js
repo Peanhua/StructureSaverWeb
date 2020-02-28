@@ -1,7 +1,9 @@
-import React        from 'react'
-import { connect }  from 'react-redux'
-import { getPlan }  from '../reducers/plansReducer'
-import Spacer       from './Spacer'
+import React            from 'react'
+import { connect }      from 'react-redux'
+import { getPlan }      from '../reducers/plansReducer'
+import Spacer           from './Spacer'
+import ButtonDeletePlan from './ButtonDeletePlan'
+
 
 const PlanInformation = (props) => {
   const plan = props.plans.find((p) => p.id === parseInt(props.id))
@@ -22,6 +24,8 @@ const PlanInformation = (props) => {
       <div className="line">Database id: {plan.id}</div>
       <div className="line">Added to database: {plan.createdAt}</div>
       <div className="line">Last database update: {plan.updatedAt}</div>
+      <Spacer />
+      <ButtonDeletePlan plan_id={plan.id} />
     </div>
   )
 }
