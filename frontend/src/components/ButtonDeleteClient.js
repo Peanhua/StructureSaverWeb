@@ -55,7 +55,7 @@ const ButtonDeleteClient = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    user:    state.user,
+    user:    state.user.user,
     clients: state.clients
   }
 }
