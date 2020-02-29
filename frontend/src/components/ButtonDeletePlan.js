@@ -31,11 +31,13 @@ const ButtonDeletePlan = (props) => {
     event.preventDefault()
 
     try {
+      const name = deleteplan.plan_name
+      
       deleteplanFormRef.current.toggleVisibility()
 
       await props.deletePlan(deleteplan.id)
 
-      props.setNotification(`Plan '${deleteplan.plan_name}' was deleted.`, 5)
+      props.setNotification(`Plan '${name}' was deleted.`, 5)
 
     } catch (exception) {
       console.log(exception)
