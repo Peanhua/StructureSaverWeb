@@ -1,5 +1,7 @@
-const Sequelize = require('sequelize')
-const db        = require('../utils/db')
+const Sequelize         = require('sequelize')
+const db                = require('../utils/db')
+const ClientKnownPlanId = require('../models/clientKnownPlanId')
+const Pending           = require('../models/pending')
 
 const Model = Sequelize.Model
 const Plan = db.sequelize.define('plan', {
@@ -27,6 +29,30 @@ const Plan = db.sequelize.define('plan', {
 
 
 //Plan.sync()
+
+Plan.delete = async (plan, deleted_by_client_id) => {
+  const plan_id = plan.plan_id
+  
+  console.log('Delete plan, plan_id =', plan_id)
+
+  await plan.destroy()
+
+  await ClientKnownPlanId.destroy({
+    where: {
+      plan_id: plan_id
+    }
+  })
+    
+
+  const clients = await Client.findAll({
+    attributes: ['client_id']
+  })
+
+  clients.forEach((client) => {
+    if (client.client_id !== deleted_by_client_id)
+      Pending.add(client.client_id, 'planDelete', plan_id)
+  })
+}
 
 
 Plan.getMissingPlanIds = async (having_plan_ids) => {

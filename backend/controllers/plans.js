@@ -2,7 +2,6 @@ const Sequelize         = require('sequelize')
 const plansRouter       = require('express').Router()
 const Plan              = require('../models/plan')
 const Client            = require('../models/client')
-const ClientKnownPlanId = require('../models/clientKnownPlanId')
 const Pending           = require('../models/pending')
 const auth              = require('../utils/auth')
 
@@ -126,7 +125,6 @@ plansRouter.post('/delete', async (request, response, next) => {
       return
 
     const plan_id = request.body.plan_id
-    console.log('Delete plan, plan_id =', plan_id)
 
     const deleteplan = await Plan.findOne({
       where: {
@@ -138,27 +136,7 @@ plansRouter.post('/delete', async (request, response, next) => {
       return
     }
 
-    await deleteplan.destroy()
-
-    ClientKnownPlanId.destroy({
-      where: {
-        plan_id: plan_id
-      }
-    })
-    
-
-    const clients = await Client.findAll({
-      attributes: ['client_id'],
-      where: {
-        client_id: {
-          [Sequelize.Op.ne]: client_id
-        }
-      }
-    })
-
-    clients.forEach((client) => {
-      Pending.add(client.client_id, 'planDelete', plan_id)
-    })
+    Plan.delete(deleteplan, client_id)
 
     response.status(204).json({ }).end()
     
@@ -194,23 +172,7 @@ plansRouter.delete('/:id', async (request, response, next) => {
       return
     }
 
-    await deleteplan.destroy()
-
-    ClientKnownPlanId.destroy({
-      where: {
-        plan_id: plan_id
-      }
-    })
-
-
-    const clients = await Client.findAll({
-      attributes: ['client_id']
-    })
-
-    clients.forEach((client) => {
-      Pending.add(client.client_id, 'planDelete', plan_id)
-    })
-    
+    Plan.delete(deleteplan, null)
     
     response.status(204).end()
     
