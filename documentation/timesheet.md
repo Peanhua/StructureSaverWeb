@@ -35,5 +35,6 @@ Does not include the time used for the game mod portion.
   <tr><td>  1.1.</td><td>  4.00</td><td>Plan name and usertext changing functionality.</td></tr>
   <tr><td>      </td><td>  1.00</td><td>Bug fixing and miscellaneous stuff.</td></tr>
   <tr><td> 28.2.</td><td>  2.00</td><td>Bug fixing and plan deleting stuff.</td></tr>
-  <tr><th>Total</th><th> 49.00</th><th></th></tr>
+  <tr><td> 29.2.</td><td>  1.50</td><td>Bug fixing and changing client password.</td></tr>
+  <tr><th>Total</th><th> 50.50</th><th></th></tr>
 </table>

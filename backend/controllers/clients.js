@@ -189,6 +189,40 @@ clientsRouter.post('/synchronize', async (request, response, next) => {
 })
 
 
+clientsRouter.post('/password/:id', async (request, response, next) => {
+  try {
+    const user = auth.checkFrontend(request, response, true)
+    if (user === null)
+      return
+
+    const new_password = request.body.password
+    if (new_password === undefined) {
+      response.status(400).json({
+        error: 'Missing password.'
+      })
+      return
+    }
+
+    const client = await Client.findOne({
+      where: {
+        id: request.params.id
+      }
+    })
+    if (client === null) {
+      response.status(404).json({ error: 'Client not found error' })
+      return
+    }
+
+    Client.changePassword(client, new_password)
+    response.status(200).json({})
+    
+  } catch (exception) {
+    next(exception)
+  }
+})
+
+
+
 clientsRouter.post('/getUpdate', async (request, response, next) => {
   console.log('clientsRouter.getUpdate()')
 

@@ -77,6 +77,12 @@ Client.createNewClient = async (client_id, password) => {
   return saved
 }
 
+Client.changePassword = async (client, new_password) => {
+  const password_hash = await passwordToHash(new_password)
+  
+  client.password_hash = password_hash
+  client.save()
+}
 
 Client.authenticate = async (client_id, password) => {
   //console.log('Client.authenticate(client_id =' , client_id, ' password =', password, ')')
