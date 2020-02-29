@@ -75,7 +75,8 @@ plansRouter.get('/:id', async (request, response, next) => {
       createdAt: plan.createdAt,
       updatedAt: plan.updatedAt,
       version:   plan.data.version,
-      pieces:    plan.data.pieces
+      pieces:    plan.data.pieces,
+      creatures: plan.data.creatures
     }
 
     response.json(jsonPlan)
