@@ -42,7 +42,8 @@ usersRouter.post('/', async (request, response, next) => {
     const newuser = {
       username:      body.username,
       name:          body.name,
-      password_hash: await User.passwordToHash(body.password)
+      password_hash: await User.passwordToHash(body.password),
+      is_admin:      body.is_admin
     }
 
     if (body.steam_id.length > 0) {

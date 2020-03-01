@@ -23,9 +23,9 @@ import {
 const ButtonAddUser = (props) => {
   const [ username, resetUsername ] = useField('text')
   const [ password, resetPassword ] = useField('password')
-  const [ name,     resetName     ] = useField('name')
+  const [ name,     resetName     ] = useField('text')
   const [ isAdmin,  resetIsAdmin  ] = useField('checkbox')
-  const [ steamId,  resetSteamId  ] = useField('steamId')
+  const [ steamId,  resetSteamId  ] = useField('text')
 
   const newuserFormRef = React.createRef()
 
@@ -54,7 +54,7 @@ const ButtonAddUser = (props) => {
       password: password.value,
       name:     name.value,
       steam_id: steamId.value,
-      is_admin: false
+      is_admin: isAdmin.value
     }
 
     try {
@@ -85,15 +85,19 @@ const ButtonAddUser = (props) => {
         </div>
         <div className="line">
           <label className="w1" htmlFor="newuser_password">Password:</label>
-          <input type="password" id="newuser_password" {...password} />
+          <input id="newuser_password" {...password} />
         </div>
         <div className="line">
           <label className="w1" htmlFor="newuser_name">Name:</label>
-          <input type="text" id="newuser_name" {...name} />
+          <input id="newuser_name" {...name} />
+        </div>
+        <div className="line">
+          <label className="w1" htmlFor="newuser_isadmin">Admin:</label>
+          <input id="newuser_isadmin" {...isAdmin} />
         </div>
         <div className="line">
           <label className="w1" htmlFor="newuser_name">Steam id:</label>
-          <input className="field" type="text" id="steamId" {...steamId} />
+          <input className="field" id="steamId" {...steamId} />
         </div>
         <span className="spacer" />
         <div className="line">

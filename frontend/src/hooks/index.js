@@ -4,11 +4,17 @@ export const useField = (type) => {
   const [value, setValue] = useState('')
 
   const onChange = (event) => {
-    setValue(event.target.value)
+    if (type === 'checkbox')
+      setValue(event.target.checked)
+    else
+      setValue(event.target.value)
   }
 
   const reset = () => {
-    setValue('')
+    if (type === 'checkbox')
+      setValue(false)
+    else
+      setValue('')
   }
 
   return [
