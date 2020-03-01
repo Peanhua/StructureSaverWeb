@@ -31,6 +31,17 @@ export const deleteUser = (user) => {
   }
 }
 
+export const changeUserPassword = (user, new_password) => {
+  return async dispatch => {
+    await usersService.changePassword(user.id, new_password)
+    dispatch({
+      type:     'CHANGE_PASSWORD_USER',
+      id:       user.id,
+      password: new_password
+    })
+  }
+}
+
 
 /* The reducer: */
 const initialState = []
@@ -42,12 +53,17 @@ const reducer = (state = initialState, action) => {
       return action.users
     }
     case 'ADD_USER': {
-      const ns = state.concat(action.user)
-      return ns
+      return state.concat(action.user)
     }
     case 'DELETE_USER': {
-      const ns = state.filter(user => user.id !== action.id)
-      return ns
+      return state.filter(user => user.id !== action.id)
+    }
+    case 'CHANGE_PASSWORD_USER': {
+      return state.map((user) => {
+        if (user.id === action.id)
+          user.password = action.password
+        return user
+      })
     }
     default: {
       return state

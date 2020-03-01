@@ -109,4 +109,39 @@ usersRouter.get('/', async (request, response, next) => {
   }
 })
 
+
+usersRouter.post('/password/:id', async (request, response, next) => {
+  // todo: allow changing users own password
+  try {
+    const user = auth.checkFrontend(request, response, true)
+    if (user === null)
+      return
+
+    const new_password = request.body.password
+    if (new_password === undefined) {
+      response.status(400).json({
+        error: 'Missing password.'
+      })
+      return
+    }
+
+    const targetuser = await User.findOne({
+      where: {
+        id: request.params.id
+      }
+    })
+    if (targetuser === null) {
+      response.status(404).json({ error: 'User not found error' })
+      return
+    }
+
+    User.changePassword(targetuser, new_password)
+    response.status(200).json({})
+    
+  } catch (exception) {
+    next(exception)
+  }
+})
+
+
 module.exports = usersRouter

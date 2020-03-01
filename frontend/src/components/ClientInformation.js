@@ -14,8 +14,8 @@ const ClientInformation = (props) => {
   return (
     <div className="detailContainer">
       <div className="header">{client.client_id}</div>
-      <Spacer />
       <ButtonChangeClientPassword id={client.id} />
+      <Spacer />
       <div className="line">Database Id: {client.id}</div>
       <div className="line">Added to database: {client.createdAt}</div>
       <div className="line">Last database update: {client.updatedAt}</div>

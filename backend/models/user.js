@@ -37,5 +37,12 @@ User.passwordToHash = async (password) => {
   return await bcrypt.hash(password, salt_rounds)
 }
 
+User.changePassword = async (user, new_password) => {
+  const password_hash = await User.passwordToHash(new_password)
+  
+  user.password_hash = password_hash
+  user.save()
+}
+
 
 module.exports = User
