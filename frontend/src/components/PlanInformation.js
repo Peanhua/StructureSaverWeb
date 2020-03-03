@@ -3,7 +3,8 @@ import { connect }      from 'react-redux'
 import { getPlan }      from '../reducers/plansReducer'
 import Spacer           from './Spacer'
 import ButtonDeletePlan from './ButtonDeletePlan'
-
+import ReactJson        from 'react-json-view'
+import Togglable        from './Togglable'
 
 const PlanInformation = (props) => {
   const plan = props.plans.find((p) => p.id === parseInt(props.id))
@@ -16,7 +17,9 @@ const PlanInformation = (props) => {
   }
 
   const itemcount = plan.pieces.reduce((count, structure) => count + structure.inventory.length, 0)
-  
+
+  const showrawRef = React.createRef()
+
   return (
     <div className="detailContainer">
       <div className="header">{plan.name}</div>
@@ -28,6 +31,10 @@ const PlanInformation = (props) => {
       <div className="line">Database id: {plan.id}</div>
       <div className="line">Added to database: {plan.createdAt}</div>
       <div className="line">Last database update: {plan.updatedAt}</div>
+      <Spacer />
+      <Togglable showButtonLabel='Show RAW plan data' hideButtonLabel='Close RAW view' ref={showrawRef}>
+        <ReactJson src={plan} />
+      </Togglable>
       <Spacer />
       <ButtonDeletePlan plan_id={plan.id} />
     </div>
