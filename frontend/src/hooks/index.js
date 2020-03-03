@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-export const useField = (type) => {
-  const [value, setValue] = useState('')
+export const useField = (type, defaultValue) => {
+  const [value, setValue] = useState(defaultValue !== undefined ? defaultValue : '')
 
   const onChange = (event) => {
     if (type === 'checkbox')
@@ -17,13 +17,17 @@ export const useField = (type) => {
       setValue('')
   }
 
+  const checked = (type === 'checkbox') ? value : null
+
   return [
     {
       type,
       value,
+      checked,
       onChange
     },
-    reset
+    reset,
+    setValue
   ]
 }
 

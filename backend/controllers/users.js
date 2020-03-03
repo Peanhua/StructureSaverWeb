@@ -145,4 +145,43 @@ usersRouter.post('/password/:id', async (request, response, next) => {
 })
 
 
+usersRouter.patch('/:id', async (request, response, next) => {
+  // todo: allow changing some of the stuff by the user self
+  try {
+    const user = auth.checkFrontend(request, response, true)
+    if (user === null)
+      return
+
+    const new_name     = request.body.name
+    const new_steam_id = request.body.steam_id
+    const new_is_admin = request.body.is_admin
+
+    const targetuser = await User.findOne({
+      where: {
+        id: request.params.id
+      }
+    })
+    if (targetuser === null) {
+      response.status(404).json({ error: 'User not found error' })
+      return
+    }
+    
+    if (new_name !== undefined)
+      targetuser.name = new_name
+    if (new_steam_id !== undefined)
+      targetuser.steam_id = new_steam_id
+    if (new_is_admin !== undefined)
+      targetuser.is_admin = new_is_admin
+
+    targetuser.save()
+
+    response.status(200).json({})
+    
+  } catch (exception) {
+    next(exception)
+  }
+})
+  
+
+
 module.exports = usersRouter

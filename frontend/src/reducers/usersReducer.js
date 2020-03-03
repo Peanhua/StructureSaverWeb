@@ -42,6 +42,17 @@ export const changeUserPassword = (user, new_password) => {
   }
 }
 
+export const updateUser = (user, changes) => {
+  return async dispatch => {
+    await usersService.updateUser(user.id, changes)
+    dispatch({
+      type:    'UPDATE_USER',
+      id:      user.id,
+      changes: changes
+    })
+  }
+}
+
 
 /* The reducer: */
 const initialState = []
@@ -62,6 +73,16 @@ const reducer = (state = initialState, action) => {
       return state.map((user) => {
         if (user.id === action.id)
           user.password = action.password
+        return user
+      })
+    }
+    case 'UPDATE_USER': {
+      return state.map((user) => {
+        if (user.id === action.id) {
+          user.name     = action.changes.name
+          user.steam_id = action.changes.steam_id
+          user.is_admin = action.changes.is_admin
+        }
         return user
       })
     }

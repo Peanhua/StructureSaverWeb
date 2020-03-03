@@ -22,19 +22,31 @@ ul {
 /* Button */
 button {
   font-size:          0.75em;
-  background-color:   rgb(222, 184, 135);
   border-radius:      4px;
+  transition:         0.1s;
+  padding-bottom:     1px;
+}
+
+button:enabled {
+  background-color:   rgb(222, 184, 135);
   border-top-color:   rgb(255, 211, 155);
   border-left-color:  rgb(255, 211, 155);
   border-bottom-color:rgb(222, 184, 135);
   border-right-color: rgb(222, 184, 135);
   color:              #5d3856;
   cursor:             pointer;
-  transition:         0.1s;
-  padding-bottom:     1px;
 }
 
-button:hover {
+button:disabled {
+  background-color:   rgb(200, 200, 200);
+  border-top-color:   rgb(200, 200, 200);
+  border-left-color:  rgb(200, 200, 200);
+  border-bottom-color:rgb(200, 200, 200);
+  border-right-color: rgb(200, 200, 200);
+  color:              #5d5d5d;
+}
+
+button:enabled:hover {
   background-color: #cdaa7d;
 }
 

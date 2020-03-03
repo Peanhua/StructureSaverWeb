@@ -42,11 +42,21 @@ const changePassword = async (id, new_password) => {
   return response.data
 }
 
+const updateUser = async (id, changes) => {
+  const config = {
+    headers: { Authorization: token }
+  }
+  const response = await axios.patch(baseUrl + '/' + id, changes, config)
+  return response.data
+}
+
+
 
 export default {
   getAll,
   create,
   deleteUser,
   changePassword,
+  updateUser,
   setToken
 }
