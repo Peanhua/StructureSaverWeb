@@ -13,12 +13,19 @@ const JWTSECRET = process.env.JWTSECRET !== undefined ? process.env.JWTSECRET : 
 const NODE_ENV  = process.env.NODE_ENV  !== undefined ? process.env.NODE_ENV  : 'test'
 const PORT      = process.env.PORT      !== undefined ? process.env.PORT      : 3001
 const PROTOCOL  = process.env.PROTOCOL  !== undefined ? process.env.PROTOCOL  : "http"
+const DATABASE_HOST     = process.env.DATABASE_HOST !== undefined ? process.env.DATABASE_HOST : '/tmp'
+const DATABASE_PORT     = process.env.DATABASE_PORT
+const DATABASE_USERNAME = process.env.DATABASE_USERNAME
+const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD
 
 module.exports = {
   AUTOCREATE_STEAM_USERS,
   CERT,
   CERT_KEY,
   DATABASE_NAME,
+  DATABASE_HOST,
+  DATABASE_USERNAME,
+  DATABASE_PASSWORD,
   JWTSECRET,
   NODE_ENV,
   PORT,
