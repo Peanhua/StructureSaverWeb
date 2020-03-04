@@ -4,8 +4,28 @@ const config = require('./utils/config')
 const http   = require('http')
 const https  = require('https')
 const fs     = require('fs')
-  
+const User   = require('./models/user')
+
+const createDefaultUser = async () => {
+  const root = await User.findOne()
+  if (root === null) {
+
+    const password_hash = await User.passwordToHash('aaa')
+
+    User.create({
+      username:      'root',
+      name:          'Administrator',
+      password_hash: password_hash,
+      is_admin:      true
+    })
+  }
+}
+
+
 db.initialize().then(() => {
+
+  createDefaultUser()
+  
   if (config.PROTOCOL === "http") {
     const server = http.createServer(app)
     server.listen(config.PORT, () => {
