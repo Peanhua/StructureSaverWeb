@@ -1,5 +1,7 @@
 import axios from 'axios'
-const baseUrl = '/api/plans'
+import config from '../config'
+
+const baseUrl = config.BACKEND + '/api/plans'
 
 let token = null
 

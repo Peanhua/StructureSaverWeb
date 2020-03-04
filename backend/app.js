@@ -1,5 +1,6 @@
 const bodyParser           = require('body-parser')
 const express              = require('express')
+const cors                 = require('cors')
 const clientsRouter        = require('./controllers/clients')
 const loginRouter          = require('./controllers/login')
 const plansRouter          = require('./controllers/plans')
@@ -7,7 +8,8 @@ const usersRouter          = require('./controllers/users')
 const middleware           = require('./utils/middleware')
 
 const app = express()
-  
+
+app.use(cors())
 app.use(bodyParser.json({
   limit: '1GB'
 }))
