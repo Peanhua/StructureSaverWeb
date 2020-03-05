@@ -1,0 +1,21 @@
+FROM node:alpine
+
+RUN apk update
+RUN apk add postgresql-client
+RUN apk add python
+RUN apk add make
+RUN apk add g++
+
+RUN adduser -D structuresaver
+WORKDIR /home/structuresaver
+
+COPY backend .
+COPY docker/wait-for-postgres.sh .
+RUN chown -R structuresaver .
+
+USER structuresaver
+RUN npm install
+
+EXPOSE 3001
+
+CMD ./wait-for-postgres.sh npm start
