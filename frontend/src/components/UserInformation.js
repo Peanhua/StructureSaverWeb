@@ -44,7 +44,7 @@ const UserInformation = (props) => {
 
   const unsavedChanges =
         nullifyEmptyString(name.value)    !== user.name     ||
-        nullifyEmptyString(steamId.value) !== user.steam_id ||
+        nullifyEmptyString(steamId.value) !== nullifyEmptyString(user.steam_id) ||
         isAdmin.value !== user.is_admin
 
   const onSaveChanges = async (event) => {
