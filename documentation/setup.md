@@ -120,4 +120,4 @@ zeenmy/structuresaverweb-frontend   latest              c39b9e1b990f          28
 zeenmy/structuresaverweb-backend    latest              b2f1e6681399          399MB
 ```
 
-The docker-compose.yml can be used to run the backend, frontend, database server, and a proxy in a one go with the docker-compose.
+The docker-compose.yml can be used to run the backend, frontend, database server, and a proxy with the docker-compose.
