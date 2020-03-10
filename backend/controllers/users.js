@@ -30,6 +30,14 @@ usersRouter.post('/', async (request, response, next) => {
       })
       return
     }
+
+    if(body.is_admin === undefined) {
+      response.status(400).json({
+        error: 'missing is_admin'
+      })
+      return
+    }
+      
       
 
     if(body.password.length < 3) {
@@ -39,11 +47,13 @@ usersRouter.post('/', async (request, response, next) => {
       return
     }
 
+    const is_admin = body.is_admin === "" ? false : body.is_admin
+
     const newuser = {
       username:      body.username,
       name:          body.name,
       password_hash: await User.passwordToHash(body.password),
-      is_admin:      body.is_admin
+      is_admin:      is_admin
     }
 
     if (body.steam_id.length > 0) {
@@ -154,7 +164,7 @@ usersRouter.patch('/:id', async (request, response, next) => {
 
     const new_name     = request.body.name
     const new_steam_id = request.body.steam_id
-    const new_is_admin = request.body.is_admin
+    const new_is_admin = request.body.is_admin === "" ? false : request.body.is_admin
 
     const targetuser = await User.findOne({
       where: {
@@ -170,8 +180,7 @@ usersRouter.patch('/:id', async (request, response, next) => {
       targetuser.name = new_name
     if (new_steam_id !== undefined)
       targetuser.steam_id = new_steam_id
-    if (new_is_admin !== undefined)
-      targetuser.is_admin = new_is_admin
+    targetuser.is_admin = new_is_admin
 
     targetuser.save()
 
