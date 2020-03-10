@@ -116,8 +116,8 @@ BackendClientPassword="password"
 
 Dockerfile.frontend and Dockerfile.backend can be used to build docker containers of the respective systems. Pre-built images can be found from the docker hub:
 ```
-zeenmy/structuresaverweb-backend    latest              6f7160fa3931               349MB
-zeenmy/structuresaverweb-frontend   latest              325d27bc7dd2               249MB
+zeenmy/structuresaverweb-backend:latest
+zeenmy/structuresaverweb-frontend:latest
 ```
 
 The docker-compose.yml can be used to run the backend, frontend, database server, and a proxy with the docker-compose.
