@@ -49,6 +49,10 @@ Below are listed all the variables:
   <tr><td>CERT_KEY</td> <td>String</td> <td>"key.pem"</td>    <td>The filename of the certificate key used for HTTPS.</td></tr>
   <tr><td>JWTSECRET</td><td>String</td> <td>"abc"</td>        <td>The secret used for creating JWTs, change to something random.</td></tr>
   <tr><td>AUTOCREATE_STEAM_USERS</td><td>Boolean</td><td>false</td><td>If set to true, everyone with a valid Steam account can login. A new user account is created automatically for new users.</td></tr>
+  <tr><td>DATABASE_HOST</td><td>String</td><td>"/tmp"</td><td>The hostname of the database server. The default "/tmp" means to use unix socket connection.</td></tr>
+  <tr><td>DATABASE_PORT</td><td>Integer</td><td></td><td>The TCP port of the database server.</td></tr>
+  <tr><td>DATABASE_USERNAME</td><td>String</td><td></td><td>The username for the database connection.</td></tr>
+  <tr><td>DATABASE_PASSWORD</td><td>String</td><td></td><td>The password for the database connection.</td></tr>
 </table>
 
 Example ".env" file:
