@@ -33,14 +33,15 @@ However, most users are probably not able to keep the Backend behind a firewall 
 
 ## Configuration
 
-Create a file named ".env" into the backend root directory, and adjust the Backend configuration in this file. The format is:
+Configuration is done through environment variables.
+
+The environment variables can also be set using a file: Create a file named ".env" into the backend root directory, and adjust the Backend configuration in this file. The format is:
 ```
 VARIABLE1=Value1
 VARIABLE2=Value2
 ...
 ```
 
-Below are listed all the variables:
 <table>
   <tr><th>Variable</th> <th>Type</th>   <th>Default value</th><th>Description</th></tr>
   <tr><td>PORT</td>     <td>Integer</td><td>3001</td>         <td>The IP port the Backend listens to.</td></tr>
@@ -63,7 +64,7 @@ CERT=/etc/mycert.pem
 CERT_KEY=/etc/mycertkey.pem
 ```
 
-If the defaults are fine, you don't need the ".env" file.
+If the defaults are fine, you don't need to define the environment variables or the ".env" file.
 
 
 ## Installing dependencies
