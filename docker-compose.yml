@@ -14,11 +14,17 @@ services:
 
   frontend:
     image: zeenmy/structuresaverweb-frontend
+    build:
+      context: .
+      dockerfile: "Dockerfile.frontend"
     ports:
       - 3000:3000
 
   backend:
     image: zeenmy/structuresaverweb-backend
+    build:
+      context: .
+      dockerfile: "Dockerfile.backend"
     depends_on:
       - "db"
     ports:
