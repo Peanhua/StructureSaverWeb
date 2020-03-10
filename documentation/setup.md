@@ -81,6 +81,8 @@ In the respective directory (backend and frontend).
 See the "backend/bin/initialize_db.sh" script for example how to initialize the database.
 The bin -directory in the backend contains also couple other useful tools for managing the database.
 
+The backend creates necessary tables and a default user "root" with password set to "aaa" if they don't exist.
+
 
 ## Starting the Backend
 
@@ -96,6 +98,8 @@ Configure the proper host and port for the backend in the package.json by settin
 $ npm start
 ```
 
+The frontend can also be built for production environment, making it smaller and faster, see https://reactjs.org/docs/optimizing-performance.html for more information. You can also see this done in the Dockerfile.frontend.
+
 
 ## Client (Ark game server) configuration
 
@@ -106,3 +110,14 @@ Backend="http://localhost:3001"
 BackendClientId="id"
 BackendClientPassword="password"
 ```
+
+
+## Docker
+
+Dockerfile.frontend and Dockerfile.backend can be used to build docker containers of the respective systems. Pre-built images can be found from the docker hub:
+```
+zeenmy/structuresaverweb-frontend   latest              c39b9e1b990f          287MB
+zeenmy/structuresaverweb-backend    latest              b2f1e6681399          399MB
+```
+
+The docker-compose.yml can be used to run the backend, frontend, database server, and a proxy in a one go with the docker-compose.
